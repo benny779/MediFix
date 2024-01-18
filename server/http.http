@@ -1,0 +1,8 @@
+@hostname = localhost
+@port = 3000
+@host = {{hostname}}:{{port}}
+@baseUrl = http://{{host}}
+@contentType = application/json
+
+
+GET {{baseUrl}} HTTP/1.1
