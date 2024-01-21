@@ -5,4 +5,13 @@
 @contentType = application/json
 
 
+### main
 GET {{baseUrl}} HTTP/1.1
+
+### example
+GET {{baseUrl}}/example/1234?filter=true HTTP/1.1
+content-type: application/json
+
+{
+    "content":"bla bla bla"
+}
