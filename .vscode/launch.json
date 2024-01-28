@@ -11,6 +11,14 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}\\server\\src\\index.js",
       "envFile": "${workspaceFolder}\\server\\.env"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Medifix Client",
+      "skipFiles": ["<node_internals>/**"],
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}"
     }
   ]
 }
