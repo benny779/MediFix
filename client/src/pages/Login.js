@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Grid, Stack, TextField, Divider, Link, InputAdornment, IconButton } from '@mui/material';
-import { GoogleIcon, Visibility, VisibilityOff } from '@mui/icons-material';
+import {  Visibility, VisibilityOff } from '@mui/icons-material';
+import GoogleIcon from '@mui/icons-material/Google';
+
 import { isValidEmail, isValidPassword } from '../helpers/validation';
 import AuthLayout from './AuthLayout';
 
@@ -39,7 +41,7 @@ const Login = () => {
             ></TextField>
             <TextField
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               required
               error={!isValidPassword(password)}
               value={password}

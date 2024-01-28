@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Button, Stack, TextField, Divider } from '@mui/material';
+import { Button, Stack, TextField, Divider, InputAdornment, IconButton } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
+import {  Visibility, VisibilityOff } from '@mui/icons-material';
 import { isValidEmail, isValidPassword } from '../helpers/validation';
 import AuthLayout from './AuthLayout';
 
@@ -11,6 +12,16 @@ const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleClickShowConfirmPassword = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -59,19 +70,47 @@ const Register = () => {
             ></TextField>
             <TextField
               label="Password"
-              type="password"
+              type={showPassword ? "text" : "password"}
               required
               error={!isValidPassword(password)}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              InputProps={{
+                // <-- This is where the toggle button is added.
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleClickShowPassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             ></TextField>
             <TextField
               label="Confirm Password"
-              type="password"
+              type={showConfirmPassword ? "text" : "password"}
               required
               error={confirmPassword !== password}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
+              InputProps={{
+                // <-- This is where the toggle button is added.
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowConfirmPassword}
+                      onMouseDown={handleClickShowConfirmPassword}
+                    >
+                      {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             ></TextField>
             <Button type="submit" variant="contained" size="large">
               Register
