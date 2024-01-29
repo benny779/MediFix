@@ -24,6 +24,26 @@ const deleted = (message = 'Deleted') => {
   };
 };
 
+const badRequest = (message = 'Bad Request ') => {
+  return {
+    success: false,
+    status: 400,
+    error: {
+      message,
+    },
+  };
+};
+
+const unauthorized = (message = 'Unauthorized ') => {
+  return {
+    success: false,
+    status: 401,
+    error: {
+      message,
+    },
+  };
+};
+
 const notFound = (message = 'Not Found') => {
   return {
     success: false,
@@ -49,4 +69,14 @@ const sendResponse = (res, result) => {
   res.status(status).json(response);
 };
 
-export { success, created, deleted, notFound, error, sendResponse, adaptRequest };
+export {
+  success,
+  created,
+  deleted,
+  badRequest,
+  unauthorized,
+  notFound,
+  error,
+  sendResponse,
+  adaptRequest,
+};

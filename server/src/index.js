@@ -9,11 +9,11 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ type: ['application/json'] }));
 app.use(cors())
-app.use('/', routes);
+app.use('/api', routes);
 
-app.use(errorHandler);
+// app.use(errorHandler);
 
 const port = config.SERVER_PORT;
 app.listen(port, () => {
-  console.log(`Server is running on port http://localhost:${port}/`);
+  console.log(`Server is running on http://localhost:${port}/`);
 });

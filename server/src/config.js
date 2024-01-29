@@ -6,7 +6,7 @@ dotenv.config();
 export const configSchema = z.object({
   SERVER_PORT: z.preprocess(
     (a) => (typeof a === 'string' ? parseInt(a) : a),
-    z.number().int('Must be an integer').positive('Must be positive').default(3005)
+    z.number().int('Must be an integer').positive('Must be positive').default(3000)
   ),
   MONGODB_URI: z.string().min(0).default(''),
 });

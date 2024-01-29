@@ -5,7 +5,7 @@ import {  Visibility, VisibilityOff } from '@mui/icons-material';
 import { isValidEmail, isValidPassword } from '../helpers/validation';
 import AuthLayout from './AuthLayout';
 
-const Register = () => {
+const RegisterForm = () => {
   const [firstName, setfirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
@@ -123,4 +123,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterForm;

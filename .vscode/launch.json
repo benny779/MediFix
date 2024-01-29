@@ -7,7 +7,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "Medifix Server",
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}\\server\\src\\index.js",
       "envFile": "${workspaceFolder}\\server\\.env"
@@ -17,8 +17,8 @@
       "request": "launch",
       "name": "Medifix Client",
       "skipFiles": ["<node_internals>/**"],
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
+      "url": "http://localhost:3002",
+      "webRoot": "${workspaceFolder}",
     }
   ]
 }

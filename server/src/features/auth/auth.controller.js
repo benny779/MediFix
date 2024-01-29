@@ -1,6 +1,6 @@
 import adaptRequest from '../../helpers/adaptRequest.js';
-import { sendResponse, success } from '../../helpers/responseHelper.js';
-import authService from './authService.js';
+import { sendResponse } from '../../helpers/responseHelper.js';
+import authService from './auth.service.js';
 
 const login = async (req, res) => {
   const client = adaptRequest(req);

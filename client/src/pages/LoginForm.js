@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import AuthLayout from './AuthLayout';
 import {
   Button,
   Grid,
@@ -8,24 +9,37 @@ import {
   Link,
   InputAdornment,
   IconButton,
+  Alert,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
-
 import { isValidEmail, isValidPassword } from '../helpers/validation';
-import AuthLayout from './AuthLayout';
-import auth from '../api/auth';
+import * as authService from '../services/auth.service';
 
-const Login = () => {
+const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [alert, setAlert] = useState(null);
+
+  const displayAlert = (text, timeout = 5_000) => {
+    setAlert(text);
+
+    setTimeout(() => {
+      setAlert(null);
+    }, timeout);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    const { success, error, data } = await authService.login(email, password);
 
-    const res = await auth({ email, password });
-    console.log(res);
+    if (!success) {
+      displayAlert(error.message);
+      return;
+    }
+
+    setAlert(`${data.email}, ${data.firstName} ${data.lastName}`);
   };
 
   const handleClickShowPassword = () => {
@@ -56,7 +70,6 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               InputProps={{
-                // <-- This is where the toggle button is added.
                 endAdornment: (
                   <InputAdornment position='end'>
                     <IconButton
@@ -79,6 +92,16 @@ const Login = () => {
               sign in
             </Button>
           </Stack>
+          {alert && (
+            <Alert
+              severity='error'
+              onClose={() => {
+                setAlert(null);
+              }}
+              sx={{ marginTop: 2 }}>
+              {alert}
+            </Alert>
+          )}
         </form>
         <Divider>or</Divider>
       </Stack>
@@ -86,4 +109,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginForm;

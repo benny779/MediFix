@@ -4,8 +4,8 @@ import React from 'react';
 
 const AuthLayout = ({ children, header, bottomButton }) => {
   return (
-    <Grid container justifyContent="center">
-      <Grid container maxWidth="md" my={4} sx={{ p: 2 }}>
+    <Grid container justifyContent='center' alignItems='center' style={{ minHeight: '96vh' }}>
+      <Grid container maxWidth='md' my={4} sx={{ p: 2 }}>
         <Grid
           container
           item
@@ -13,16 +13,18 @@ const AuthLayout = ({ children, header, bottomButton }) => {
           sm={7}
           md={6}
           sx={{ p: 2, border: 1, borderColor: 'primary.main' }}
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Typography marginY={2} variant="h4" textAlign="center">
+          direction='column'
+          alignItems='center'
+          justifyContent='center'>
+          <Typography marginY={2} variant='h4' textAlign='center'>
             {header}
           </Typography>
           {children}
           <Stack>
-            <Button href={bottomButton?.target || '#'} style={{ Text }} sx={{ paddingX: 3, marginTop: 1 }}>
+            <Button
+              href={bottomButton?.target || '#'}
+              style={{ Text }}
+              sx={{ paddingX: 3, marginTop: 1 }}>
               {bottomButton?.text || 'Buttom Button'}
             </Button>
           </Stack>

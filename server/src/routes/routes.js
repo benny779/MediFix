@@ -1,7 +1,7 @@
 import express from 'express';
 import { success, notFound } from '../helpers/responseHelper.js';
 import exampleRoute from './exampleRoute.js';
-import authRoute from '../features/auth/authRouter.js';
+import authRoute from '../features/auth/auth.routes.js';
 
 const routes = express.Router();
 

@@ -4,9 +4,9 @@ import Routes from './Routes';
 
 function App() {
   return (
-    <React.StrictMode>
+    <>
       <RouterProvider router={Routes} />
-    </React.StrictMode>
+    </>
   );
 }
 
