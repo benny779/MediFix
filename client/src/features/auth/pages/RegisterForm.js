@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Stack, TextField, Divider, InputAdornment, IconButton } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
-import {  Visibility, VisibilityOff } from '@mui/icons-material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { isValidEmail, isValidPassword } from '../../../helpers/validation';
 import AuthLayout from './AuthLayout';
 
@@ -70,7 +70,7 @@ const RegisterForm = () => {
             ></TextField>
             <TextField
               label="Password"
-              type={showPassword ? "text" : "password"}
+              type={showPassword ? 'text' : 'password'}
               required
               error={!isValidPassword(password)}
               value={password}
@@ -79,11 +79,7 @@ const RegisterForm = () => {
                 // <-- This is where the toggle button is added.
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleClickShowPassword}
-                    >
+                    <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
                       {showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
@@ -92,7 +88,7 @@ const RegisterForm = () => {
             ></TextField>
             <TextField
               label="Confirm Password"
-              type={showConfirmPassword ? "text" : "password"}
+              type={showConfirmPassword ? 'text' : 'password'}
               required
               error={confirmPassword !== password}
               value={confirmPassword}
@@ -101,11 +97,7 @@ const RegisterForm = () => {
                 // <-- This is where the toggle button is added.
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowConfirmPassword}
-                      onMouseDown={handleClickShowConfirmPassword}
-                    >
+                    <IconButton aria-label="toggle password visibility" onClick={handleClickShowConfirmPassword}>
                       {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>

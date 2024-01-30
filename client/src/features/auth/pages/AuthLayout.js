@@ -1,6 +1,7 @@
 import { Button, Grid, Stack, Typography } from '@mui/material';
-import { purple } from '@mui/material/colors';
 import React from 'react';
+import banner from '../assets/banner.jpg'
+import Image from 'mui-image';
 
 const AuthLayout = ({ children, header, bottomButton }) => {
   return (
@@ -29,7 +30,9 @@ const AuthLayout = ({ children, header, bottomButton }) => {
             </Button>
           </Stack>
         </Grid>
-        <Grid item sm={5} md={6} sx={{ bgcolor: purple[500] }}></Grid>
+        <Grid item sm={5} md={6}>
+          <Image src={banner} alt='' fit='cover' duration={0}/>
+        </Grid>
       </Grid>
     </Grid>
   );
