@@ -13,12 +13,12 @@ import {
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
-import { isValidEmail, isValidPassword } from '../helpers/validation';
-import * as authService from '../services/auth.service';
+import { isValidEmail, isValidPassword } from '../../../helpers/validation';
+import * as authService from '../auth.service';
 
 const LoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('a@a.com');
+  const [password, setPassword] = useState('Aq123456');
   const [showPassword, setShowPassword] = useState(false);
   const [alert, setAlert] = useState(null);
 
@@ -32,6 +32,7 @@ const LoginForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     const { success, error, data } = await authService.login(email, password);
 
     if (!success) {

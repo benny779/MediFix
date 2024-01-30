@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Stack, TextField, Divider, InputAdornment, IconButton } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import {  Visibility, VisibilityOff } from '@mui/icons-material';
-import { isValidEmail, isValidPassword } from '../helpers/validation';
+import { isValidEmail, isValidPassword } from '../../../helpers/validation';
 import AuthLayout from './AuthLayout';
 
 const RegisterForm = () => {
