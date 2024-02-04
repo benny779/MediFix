@@ -4,10 +4,19 @@ import authService from './auth.service.js';
 
 const login = async (req, res) => {
   const client = adaptRequest(req);
+  const { email, password } = client.body;
 
-  const loginResult = authService.login(client.body);
+  const loginResult = await authService.login(email, password);
 
   sendResponse(res, loginResult);
 };
 
-export default { login };
+const register = async (req, res) => {
+  const client = adaptRequest(req);
+
+  const registerResult = await authService.register(client.body);
+
+  sendResponse(res, registerResult);
+};
+
+export default { login, register };

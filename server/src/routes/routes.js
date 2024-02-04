@@ -8,7 +8,7 @@ const routes = express.Router();
 routes.use('/auth', authRoute)
 routes.use('/example', exampleRoute)
 
-routes.use('/', async (req, res) => res.json(success('Hello World!')));
+// routes.use('/', async (req, res) => res.json(success('Hello World!')));
 
 routes.use((req, res) => {
   res.status(404).json(notFound());
