@@ -23,7 +23,10 @@ const insertUser = async (userDetails) => {
 };
 
 const getUserByEmail = async (email) => {
-  const [rows] = await DB.execute('SELECT `user_id`, `email`, `password` FROM users WHERE `email` = ?', [email]);
+  const [rows] = await DB.execute(
+    'SELECT `user_id`, `email`, `password`, `first_name`, `last_name` FROM users WHERE `email` = ?',
+    [email]
+  );
   return rows;
 };
 
@@ -79,7 +82,15 @@ const login = async (email, password) => {
       return error('Failed to white list the refresh token.');
     }
 
-    return success({ accessToken, refreshToken });
+    return success({
+      accessToken,
+      refreshToken,
+      user: {
+        email: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name,
+      },
+    });
   } catch (err) {
     return error(err.message);
   }
