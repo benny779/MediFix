@@ -5,8 +5,14 @@ const sendRequest = async (request) => {
     const { data } = await request();
     return data;
   } catch (error) {
-    const errorResponse = error.response.data;
-    errorResponse.error.statusCode = error.response.status;
+    const errorResponse = error.response?.data || {
+      success: false,
+      error: {
+        message: 'Server unavailable',
+      },
+    };
+
+    errorResponse.statusCode = error.response?.status || 500;
     return errorResponse;
   }
 };
