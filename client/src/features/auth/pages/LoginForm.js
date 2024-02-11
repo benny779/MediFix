@@ -29,8 +29,11 @@ const LoginForm = () => {
       displayAlert(error.message);
       return;
     }
+
     const { user } = data;
     setAlert(`${user.email}, ${user.firstName} ${user.lastName}`);
+
+    
   };
 
   const handleClickShowPassword = () => {
