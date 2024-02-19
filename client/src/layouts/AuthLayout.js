@@ -1,6 +1,6 @@
 import { Button, Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
-import banner from '../assets/banner.jpg'
+import { banner } from '../features/authentication';
 import Image from 'mui-image';
 
 const AuthLayout = ({ children, header, bottomButton }) => {
@@ -31,7 +31,7 @@ const AuthLayout = ({ children, header, bottomButton }) => {
           </Stack>
         </Grid>
         <Grid item sm={5} md={6}>
-          <Image src={banner} alt='' fit='cover' duration={0}/>
+          <Image src={banner} alt='' fit='cover' duration={0} />
         </Grid>
       </Grid>
     </Grid>

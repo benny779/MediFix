@@ -1,5 +1,5 @@
 import Axios from 'axios';
-import { getCurrentUser } from '../features/auth/auth.service';
+import { getCurrentUser } from '../features/authentication';
 
 function getAuthHeader() {
   const currentUser = getCurrentUser();
