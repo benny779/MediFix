@@ -1,0 +1,396 @@
+{
+  "buildings": [
+    {
+      "id": 1,
+      "name": "Building A",
+      "floors": [
+        {
+          "id": 1,
+          "name": "Floor 1",
+          "departments": [
+            {
+              "id": 1,
+              "name": "Department 1",
+              "rooms": [
+                {
+                  "id": 1,
+                  "name": "Room 101"
+                },
+                {
+                  "id": 2,
+                  "name": "Room 102"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "name": "Department 2",
+              "rooms": [
+                {
+                  "id": 3,
+                  "name": "Room 201"
+                },
+                {
+                  "id": 4,
+                  "name": "Room 202"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Floor 2",
+          "departments": [
+            {
+              "id": 3,
+              "name": "Department 3",
+              "rooms": [
+                {
+                  "id": 5,
+                  "name": "Room 301"
+                },
+                {
+                  "id": 6,
+                  "name": "Room 302"
+                }
+              ]
+            },
+            {
+              "id": 4,
+              "name": "Department 4",
+              "rooms": [
+                {
+                  "id": 7,
+                  "name": "Room 401"
+                },
+                {
+                  "id": 8,
+                  "name": "Room 402"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "Floor 3",
+          "departments": [
+            {
+              "id": 5,
+              "name": "Department 5",
+              "rooms": [
+                {
+                  "id": 9,
+                  "name": "Room 501"
+                },
+                {
+                  "id": 10,
+                  "name": "Room 502"
+                }
+              ]
+            },
+            {
+              "id": 6,
+              "name": "Department 6",
+              "rooms": [
+                {
+                  "id": 11,
+                  "name": "Room 601"
+                },
+                {
+                  "id": 12,
+                  "name": "Room 602"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Building B",
+      "floors": [
+        {
+          "id": 1,
+          "name": "Floor 1",
+          "departments": [
+            {
+              "id": 9,
+              "name": "Department 9",
+              "rooms": [
+                {
+                  "id": 17,
+                  "name": "Room 101"
+                },
+                {
+                  "id": 18,
+                  "name": "Room 102"
+                }
+              ]
+            },
+            {
+              "id": 10,
+              "name": "Department 10",
+              "rooms": [
+                {
+                  "id": 19,
+                  "name": "Room 201"
+                },
+                {
+                  "id": 20,
+                  "name": "Room 202"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Floor 2",
+          "departments": [
+            {
+              "id": 11,
+              "name": "Department 11",
+              "rooms": [
+                {
+                  "id": 21,
+                  "name": "Room 301"
+                },
+                {
+                  "id": 22,
+                  "name": "Room 302"
+                }
+              ]
+            },
+            {
+              "id": 12,
+              "name": "Department 12",
+              "rooms": [
+                {
+                  "id": 23,
+                  "name": "Room 401"
+                },
+                {
+                  "id": 24,
+                  "name": "Room 402"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "Floor 3",
+          "departments": [
+            {
+              "id": 13,
+              "name": "Department 13",
+              "rooms": [
+                {
+                  "id": 25,
+                  "name": "Room 501"
+                },
+                {
+                  "id": 26,
+                  "name": "Room 502"
+                }
+              ]
+            },
+            {
+              "id": 14,
+              "name": "Department 14",
+              "rooms": [
+                {
+                  "id": 27,
+                  "name": "Room 601"
+                },
+                {
+                  "id": 28,
+                  "name": "Room 602"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "Floor 4",
+          "departments": [
+            {
+              "id": 15,
+              "name": "Department 15",
+              "rooms": [
+                {
+                  "id": 29,
+                  "name": "Room 701"
+                },
+                {
+                  "id": 30,
+                  "name": "Room 702"
+                }
+              ]
+            },
+            {
+              "id": 16,
+              "name": "Department 16",
+              "rooms": [
+                {
+                  "id": 31,
+                  "name": "Room 801"
+                },
+                {
+                  "id": 32,
+                  "name": "Room 802"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Building C",
+      "floors": [
+        {
+          "id": 1,
+          "name": "Floor 1",
+          "departments": [
+            {
+              "id": 17,
+              "name": "Department 17",
+              "rooms": [
+                {
+                  "id": 33,
+                  "name": "Room 101"
+                },
+                {
+                  "id": 34,
+                  "name": "Room 102"
+                }
+              ]
+            },
+            {
+              "id": 18,
+              "name": "Department 18",
+              "rooms": [
+                {
+                  "id": 35,
+                  "name": "Room 201"
+                },
+                {
+                  "id": 36,
+                  "name": "Room 202"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "Floor 2",
+          "departments": [
+            {
+              "id": 19,
+              "name": "Department 19",
+              "rooms": [
+                {
+                  "id": 37,
+                  "name": "Room 301"
+                },
+                {
+                  "id": 38,
+                  "name": "Room 302"
+                }
+              ]
+            },
+            {
+              "id": 20,
+              "name": "Department 20",
+              "rooms": [
+                {
+                  "id": 39,
+                  "name": "Room 401"
+                },
+                {
+                  "id": 40,
+                  "name": "Room 402"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "Floor 3",
+          "departments": [
+            {
+              "id": 21,
+              "name": "Department 21",
+              "rooms": [
+                {
+                  "id": 41,
+                  "name": "Room 501"
+                },
+                {
+                  "id": 42,
+                  "name": "Room 502"
+                }
+              ]
+            },
+            {
+              "id": 22,
+              "name": "Department 22",
+              "rooms": [
+                {
+                  "id": 43,
+                  "name": "Room 601"
+                },
+                {
+                  "id": 44,
+                  "name": "Room 602"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "Floor 4",
+          "departments": [
+            {
+              "id": 23,
+              "name": "Department 23",
+              "rooms": [
+                {
+                  "id": 45,
+                  "name": "Room 701"
+                },
+                {
+                  "id": 46,
+                  "name": "Room 702"
+                }
+              ]
+            },
+            {
+              "id": 24,
+              "name": "Department 24",
+              "rooms": [
+                {
+                  "id": 47,
+                  "name": "Room 801"
+                },
+                {
+                  "id": 48,
+                  "name": "Room 802"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

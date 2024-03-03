@@ -1,3 +1,4 @@
-import  ServiceCallsTable  from './components/ServiceCallsTable';
+import ServiceCallsTable from './components/ServiceCallsTable';
+import CreateServiceCallForm from './components/CreateServiceCallForm';
 
-export { ServiceCallsTable };
+export { ServiceCallsTable, CreateServiceCallForm };

@@ -14,7 +14,8 @@
       },
       "room": {
         "name": "13"
-      }
+      },
+      "text": "additional location bla bla"
     },
     "serviceCallType": {
       "id": 2,
@@ -27,7 +28,7 @@
       "name": "Tap"
     },
     "details": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam viverra convallis maximus.",
-    "dateCreated":"2024-03-03T10:10:40.000Z",
+    "dateCreated": "2024-03-03T10:10:40.000Z",
     "priority": {
       "id": 1,
       "value": "Low"
@@ -38,11 +39,11 @@
       "dateTime": "2024-03-03T16:14:46.755Z"
     },
     "statuses": [
-        {
-          "id": 2,
-          "value": "AssignedToTechnician",
-          "dateTime": "2024-03-03T11:10:40.000Z"
-        },
+      {
+        "id": 2,
+        "value": "AssignedToTechnician",
+        "dateTime": "2024-03-03T11:10:40.000Z"
+      },
       {
         "id": 1,
         "value": "New",
