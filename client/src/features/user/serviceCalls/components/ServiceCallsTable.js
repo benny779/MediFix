@@ -12,6 +12,10 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import demo from '../demo.json';
+import { formatJsonDateTime } from '../../../../utils/dateHelper';
+
+const tableHeaders = ['Creatred', 'Closed', 'Details', 'Location', 'Status', 'Technician'];
 
 function createData(name, calories, fat, carbs, protein, price) {
   return {
@@ -40,49 +44,51 @@ function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
 
+  const closedDateTime =
+    row.currentStatus.id === 4 && formatJsonDateTime(row.currentStatus.dateTime);
+
   return (
     <React.Fragment>
       <TableRow hover sx={{ '& > *': { borderBottom: 'unset' }, cursor: 'pointer' }}>
         <TableCell>
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+          <IconButton aria-label='expand row' size='small' onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
-          {row.name}
+        <TableCell component='th' scope='row'>
+          {formatJsonDateTime(row.dateCreated)}
         </TableCell>
-        <TableCell>{row.fat}</TableCell>
-        <TableCell>{row.calories}</TableCell>
-        <TableCell>{row.carbs}</TableCell>
-        <TableCell>{row.protein}</TableCell>
+        <TableCell>{closedDateTime}</TableCell>
+        <TableCell>{row.details}</TableCell>
+        <TableCell>{row.location.id}</TableCell>
+        <TableCell>{row.currentStatus.value}</TableCell>
+        <TableCell>{row.techinician.name}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
+          <Collapse in={open} timeout='auto' unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
-                History
+              <Typography variant='h6' gutterBottom component='div'>
+                Status History
               </Typography>
-              <Table size="small" aria-label="purchases">
+              <Table size='small' aria-label='purchases'>
                 <TableHead>
                   <TableRow>
                     <TableCell>Date</TableCell>
-                    <TableCell>Customer</TableCell>
-                    <TableCell>Amount</TableCell>
-                    <TableCell>Total price ($)</TableCell>
+                    <TableCell>Status</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.history.map((historyRow) => (
-                    <TableRow key={historyRow.date}>
-                      <TableCell component="th" scope="row">
-                        {historyRow.date}
-                      </TableCell>
-                      <TableCell>{historyRow.customerId}</TableCell>
-                      <TableCell align="right">{historyRow.amount}</TableCell>
-                      <TableCell align="right">{Math.round(historyRow.amount * row.price * 100) / 100}</TableCell>
-                    </TableRow>
-                  ))}
+                  {row.statuses
+                    .sort((s1, s2) => s1.id - s2.id)
+                    .map((historyRow) => (
+                      <TableRow key={historyRow.id}>
+                        <TableCell component='th' scope='row'>
+                          {historyRow.value}
+                        </TableCell>
+                        <TableCell>{formatJsonDateTime(historyRow.dateTime)}</TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </Box>
@@ -93,13 +99,8 @@ function Row(props) {
   );
 }
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0, 3.99),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 4.99),
-  createData('Eclair', 262, 16.0, 24, 6.0, 3.79),
-  createData('Cupcake', 305, 3.7, 67, 4.3, 2.5),
-  createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
-];
+const rows = demo;
+console.log(rows);
 
 export default function ServiceCallsTable() {
   return (
@@ -109,16 +110,14 @@ export default function ServiceCallsTable() {
           <TableHead>
             <TableRow>
               <TableCell />
-              <TableCell>Details</TableCell>
-              <TableCell>Location</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Technicion</TableCell>
-              <TableCell></TableCell>
+              {tableHeaders.map((col) => (
+                <TableCell key={col}>{col}</TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
             {rows.map((row) => (
-              <Row key={row.name} row={row} />
+              <Row key={row.serviceCallId} row={row} />
             ))}
           </TableBody>
         </Table>
