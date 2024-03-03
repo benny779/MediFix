@@ -4,7 +4,7 @@
     "location": {
       "id": "1234",
       "building": {
-        "name": "Building A"
+        "name": "A"
       },
       "floor": {
         "name": "2"

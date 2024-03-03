@@ -14,35 +14,21 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import demo from '../demo.json';
 import { formatJsonDateTime } from '../../../../utils/dateHelper';
+import { Tooltip } from '@mui/material';
 
 const tableHeaders = ['Creatred', 'Closed', 'Details', 'Location', 'Status', 'Technician'];
-
-function createData(name, calories, fat, carbs, protein, price) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    price,
-    history: [
-      {
-        date: '2020-01-05',
-        customerId: '11091700',
-        amount: 3,
-      },
-      {
-        date: '2020-01-02',
-        customerId: 'Anonymous',
-        amount: 1,
-      },
-    ],
-  };
-}
 
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
+
+  const { location } = row;
+  const building = location.building.name;
+  const floor = location.floor.name;
+  const department = location.department.name;
+  const room = location.room.name;
+
+  const locationString = `Building ${building}, Floor ${floor}, ${department}, Room ${room}`;
 
   const closedDateTime =
     row.currentStatus.id === 4 && formatJsonDateTime(row.currentStatus.dateTime);
@@ -60,7 +46,9 @@ function Row(props) {
         </TableCell>
         <TableCell>{closedDateTime}</TableCell>
         <TableCell>{row.details}</TableCell>
-        <TableCell>{row.location.id}</TableCell>
+        <Tooltip title={locationString}>
+          <TableCell>{row.location.id}</TableCell>
+        </Tooltip>
         <TableCell>{row.currentStatus.value}</TableCell>
         <TableCell>{row.techinician.name}</TableCell>
       </TableRow>
@@ -80,7 +68,7 @@ function Row(props) {
                 </TableHead>
                 <TableBody>
                   {row.statuses
-                    .sort((s1, s2) => s1.id - s2.id)
+                    .sort((left, right) => left.id - right.id)
                     .map((historyRow) => (
                       <TableRow key={historyRow.id}>
                         <TableCell component='th' scope='row'>
