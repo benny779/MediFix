@@ -130,7 +130,7 @@ export default function PageContainer({children}) {
 
         {menuItems.map((group, index) => {
           return (
-            <>
+            <div key={index}>
               <Divider />
               {group.map((item) => {
                 return (
@@ -163,7 +163,7 @@ export default function PageContainer({children}) {
                   </ListItem>
                 );
               })}
-            </>
+            </div>
           );
         })}
       </Drawer>

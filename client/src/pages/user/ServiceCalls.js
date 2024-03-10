@@ -18,31 +18,29 @@ const ServiceCalls = () => {
   const handleDisplayMode = (e, value) => setDisplayMode(value);
 
   return (
-    <>
-      <PageContainer>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 2 }}>
-          <ToggleButtonGroup
-            value={displayMode}
-            exclusive
-            onChange={handleDisplayMode}
-            aria-label='text alignment'>
-            <ToggleButton value='table' aria-label='left aligned'>
-              <TableRowsIcon />
-            </ToggleButton>
-            <ToggleButton value='grid' aria-label='centered'>
-              <AppsIcon />
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </Box>
+    <PageContainer>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 2 }}>
+        <ToggleButtonGroup
+          value={displayMode}
+          exclusive
+          onChange={handleDisplayMode}
+          aria-label='text alignment'>
+          <ToggleButton value='table' aria-label='left aligned'>
+            <TableRowsIcon />
+          </ToggleButton>
+          <ToggleButton value='grid' aria-label='centered'>
+            <AppsIcon />
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
 
-        {displayMode === 'table' ? <ServiceCallsTable /> : <CardView />}
+      {displayMode === 'table' ? <ServiceCallsTable /> : <CardView />}
 
-        {/* <CreateServiceCallForm/> */}
-        <Fab color='primary' style={fabStyle}>
-          <AddIcon />
-        </Fab>
-      </PageContainer>
-    </>
+      {/* <CreateServiceCallForm/> */}
+      <Fab color='primary' style={fabStyle}>
+        <AddIcon />
+      </Fab>
+    </PageContainer>
   );
 };
 
