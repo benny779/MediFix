@@ -16,7 +16,15 @@ import demo from '../demo.json';
 import { formatJsonDateTime } from '../../../../utils/dateHelper';
 import { Tooltip } from '@mui/material';
 
-const tableHeaders = ['Creatred', 'Closed', 'Details', 'Location', 'Status', 'Technician'];
+const tableHeaders = [
+  'Category',
+  'Created',
+  'Closed',
+  'Details',
+  'Location',
+  'Status',
+  'Technician',
+];
 
 function Row(props) {
   const { row } = props;
@@ -28,6 +36,7 @@ function Row(props) {
   const department = location.department.name;
   const room = location.room.name;
 
+  const category = `${row.category.name} | ${row.subCategory.name}`;
   const locationString = `Building ${building}, Floor ${floor}, ${department}, Room ${room}`;
 
   const closedDateTime =
@@ -41,9 +50,8 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component='th' scope='row'>
-          {formatJsonDateTime(row.dateCreated)}
-        </TableCell>
+        <TableCell>{category}</TableCell>
+        <TableCell>{formatJsonDateTime(row.dateCreated)}</TableCell>
         <TableCell>{closedDateTime}</TableCell>
         <TableCell>{row.details}</TableCell>
         <Tooltip title={locationString}>
