@@ -8,11 +8,11 @@ import { tokenExistsAndNotExpired } from './features/authentication';
 console.log(tokenExistsAndNotExpired());
 
 export const router = createBrowserRouter([
-  { path: '/', element: <ServiceCalls /> },
-  { path: '/ServiceCalls', element: <ServiceCalls /> },
+  { path: '/', element: tokenExistsAndNotExpired() ? <ServiceCalls /> : <Login /> },
+  { path: '/ServiceCalls', element: tokenExistsAndNotExpired() ? <ServiceCalls /> : <Login /> },
   { path: '/login', element: <Login /> },
   { path: '/register', element: <Register /> },
-  { path: '/createServiceCall', element: <CreateServiceCallForm /> },
+  { path: '/createServiceCall', element: tokenExistsAndNotExpired() ? <CreateServiceCallForm /> : <Login /> },
 ]);
 
 export default router;
