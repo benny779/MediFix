@@ -3,16 +3,20 @@ import axios from './axios';
 const sendRequest = async (request) => {
   try {
     const { data } = await request();
-    return data;
+    return { success: true, data };
   } catch (error) {
-    const errorResponse = error.response?.data || {
-      success: false,
+    const statusCode = error.response?.status || 500;
+
+    const errorResponse = {
       error: {
-        message: 'Server unavailable',
+        detail: statusCode === 400 ? 'Validation error' : 'Server unavailable',
+        ...error.response?.data,
       },
     };
 
-    errorResponse.statusCode = error.response?.status || 500;
+    errorResponse.success = false;
+    errorResponse.statusCode = statusCode;
+
     return errorResponse;
   }
 };

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Stack, TextField, Divider, InputAdornment, IconButton } from '@mui/material';
+import { Button, Stack, TextField, Divider, InputAdornment, IconButton, Alert } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { isValidEmail, isValidPassword } from '../utils/validation';
 import AuthLayout from '../layouts/AuthLayout';
+import * as authService from '../features/authentication';
 
 const RegisterForm = () => {
   const [firstName, setfirstName] = useState('');
@@ -14,7 +15,15 @@ const RegisterForm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [alert, setAlert] = useState(null);
 
+  const displayAlert = (text, timeout = 5_000) => {
+    setAlert(text);
+
+    setTimeout(() => {
+      setAlert(null);
+    }, timeout);
+  };
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
@@ -23,11 +32,28 @@ const RegisterForm = () => {
     setShowConfirmPassword(!showConfirmPassword);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log(`${email}:${password}`);
-    // TODO: login to backend
+    const registerObj = {
+      userType: 1,
+      firstName,
+      lastName,
+      email,
+      password,
+      confirmPassword,
+      phoneNumber: phone,
+    };
+
+    const { success, error, data } = await authService.register(registerObj);
+
+    if (!success) {
+      displayAlert(error.detail);
+      return;
+    }
+
+    const { id } = data;
+    setAlert(id);
   };
 
   return (
@@ -108,6 +134,17 @@ const RegisterForm = () => {
               Register
             </Button>
           </Stack>
+          {alert && (
+            <Alert
+              severity="error"
+              onClose={() => {
+                setAlert(null);
+              }}
+              sx={{ marginTop: 2 }}
+            >
+              {alert}
+            </Alert>
+          )}
         </form>
         <Divider>or</Divider>
       </Stack>

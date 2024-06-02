@@ -36,12 +36,12 @@ const LoginForm = () => {
     const { success, error, data } = await authService.login(email, password);
 
     if (!success) {
-      displayAlert(error.message);
+      displayAlert(error.detail);
       return;
     }
 
-    const { user } = data;
-    setAlert(`${user.email}, ${user.firstName} ${user.lastName}`);
+    const { accessToken } = data;
+    setAlert(accessToken);
   };
 
   const handleClickShowPassword = () => {

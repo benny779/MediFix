@@ -4,7 +4,7 @@ import { getCurrentUser } from '../features/authentication';
 function getAuthHeader() {
   const currentUser = getCurrentUser();
 
-  return currentUser ? { Authorization: 'Bearer ' + currentUser.user.accessToken } : {};
+  return currentUser ? { Authorization: 'Bearer ' + currentUser.accessToken } : {};
 }
 
 function authRequestInterceptor(config) {
