@@ -1,20 +1,21 @@
-import { createBrowserRouter } from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import ServiceCalls from './pages/user/ServiceCalls';
-import { CreateServiceCallForm } from './features/user/serviceCalls';
-import { tokenExistsAndNotExpired } from './features/authentication';
+// import { createBrowserRouter, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// import Login from './pages/Login';
+// import Register from './pages/Register';
+// import ServiceCalls from './pages/user/ServiceCalls';
+// import { CreateServiceCallForm } from './features/user/serviceCalls';
+// import { tokenExistsAndNotExpired } from './features/authentication';
+// import PrivateRoutes from './PrivateRoutes';
 
-console.log(tokenExistsAndNotExpired());
+// console.log(tokenExistsAndNotExpired());
 
-export const router = createBrowserRouter([
+// export const router = createBrowserRouter([
 
-  { path: '/', element: tokenExistsAndNotExpired() ? <ServiceCalls /> : <Login /> },
-  { path: '/ServiceCalls', element: tokenExistsAndNotExpired() ? <ServiceCalls /> : <Login /> },
-  { path: '/login', element: tokenExistsAndNotExpired() ? <ServiceCalls /> : <Login /> },
-  { path: '/register', element: <Register /> },
-  { path: '/createServiceCall', element: tokenExistsAndNotExpired() ? <CreateServiceCallForm /> : <Login /> },
+//   // { path: '/', element: tokenExistsAndNotExpired() ? <ServiceCalls /> : <Login /> },
+//   // { path: '/ServiceCalls', element: tokenExistsAndNotExpired() ? <ServiceCalls /> : <Login /> },
+//   // { path: '/login', element: tokenExistsAndNotExpired() ? <ServiceCalls /> : <Login /> },
+//   // { path: '/register', element: <Register /> },
+//   // { path: '/createServiceCall', element: tokenExistsAndNotExpired() ? <CreateServiceCallForm /> : <Login /> },
 
-]);
+// ]);
 
-export default router;
+// export default router;
