@@ -9,26 +9,24 @@ import {
   Link,
   InputAdornment,
   IconButton,
-  Alert,
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { isValidEmail, isValidPassword } from '../utils/validation';
 import * as authService from '../features/authentication';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAlert } from '../context/AlertContext';
 
 const LoginForm = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
+
+  const { displayAlert } = useAlert();
+
   const [email, setEmail] = useState('a@a.com');
   const [password, setPassword] = useState('Aq123456');
   const [showPassword, setShowPassword] = useState(false);
-  const [alert, setAlert] = useState(null);
-
-  const displayAlert = (text, timeout = 5_000) => {
-    setAlert(text);
-
-    setTimeout(() => {
-      setAlert(null);
-    }, timeout);
-  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -41,7 +39,8 @@ const LoginForm = () => {
     }
 
     const { accessToken } = data;
-    setAlert(accessToken);
+    displayAlert(accessToken);
+    navigate(from, { replace: true });
   };
 
   const handleClickShowPassword = () => {
@@ -93,16 +92,6 @@ const LoginForm = () => {
               sign in
             </Button>
           </Stack>
-          {alert && (
-            <Alert
-              severity='error'
-              onClose={() => {
-                setAlert(null);
-              }}
-              sx={{ marginTop: 2 }}>
-              {alert}
-            </Alert>
-          )}
         </form>
         <Divider>or</Divider>
       </Stack>
