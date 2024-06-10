@@ -1,14 +1,11 @@
-import { Outlet, Navigate } from 'react-router-dom';
+import { Outlet, Navigate, useLocation } from 'react-router-dom';
 import { tokenExistsAndNotExpired } from './features/authentication';
 
 const PrivateRoutes = () => {
-  let auth = { token: false };
+  const auth = { token: tokenExistsAndNotExpired() };
+  const location = useLocation();
 
-  if (tokenExistsAndNotExpired()) {
-    auth.token = true;
-  }
-  console.log(auth.token);
-  return auth.token ? <Outlet /> : <Navigate to="/login" />;
+  return auth.token ? <Outlet /> : <Navigate to='/login' state={{ from: location }} replace />;
 };
 
 export default PrivateRoutes;
