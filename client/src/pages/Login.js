@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AuthLayout from '../layouts/AuthLayout';
 import {
   Button,
@@ -9,20 +9,23 @@ import {
   Link,
   InputAdornment,
   IconButton,
+  CircularProgress,
 } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { isValidEmail, isValidPassword } from '../utils/validation';
-import * as authService from '../features/authentication';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAlert } from '../context/AlertContext';
+import { useAuth } from '../features/authentication';
 
 const LoginForm = () => {
+  const { login, error, isLoading } = useAuth();
+  const { displayAlert } = useAlert();
+
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
-
-  const { displayAlert } = useAlert();
 
   const [email, setEmail] = useState('a@a.com');
   const [password, setPassword] = useState('Aq123456');
@@ -31,21 +34,18 @@ const LoginForm = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const { success, error, data } = await authService.login(email, password);
+    const { isSuccess } = await login(email, password);
 
-    if (!success) {
-      displayAlert(error.detail);
-      return;
-    }
-
-    const { accessToken } = data;
-    displayAlert(accessToken);
-    navigate(from, { replace: true });
+    isSuccess && navigate(from, { replace: true });
   };
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  useEffect(() => {
+    error && displayAlert(error.detail);
+  }, [error]);
 
   return (
     <AuthLayout header='Login Form' bottomButton={{ text: 'Register', target: '/register' }}>
@@ -88,9 +88,9 @@ const LoginForm = () => {
                 </Link>
               </Grid>
             </Grid>
-            <Button type='submit' variant='contained' size='large'>
-              sign in
-            </Button>
+            <LoadingButton loading={isLoading} type='submit' variant='contained' size='large'>
+              <span>sign in</span>
+            </LoadingButton>
           </Stack>
         </form>
         <Divider>or</Divider>

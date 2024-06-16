@@ -19,7 +19,7 @@ export const AlertProvider = ({ children }) => {
   }, []);
 
   return (
-    <AlertContext.Provider value={{ alert, displayAlert }}>
+    <AlertContext.Provider value={{ displayAlert }}>
       {children}
       {alert && (
         <Alert

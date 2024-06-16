@@ -1,9 +1,6 @@
-import login from './services/login';
-import register from './services/register';
-import logout from './services/logout';
-import getCurrentUser, { tokenExistsAndNotExpired } from './services/getCurrentUser';
+import { useAuth, AuthProvider } from './services/AuthContext';
 
-export { login, logout, register, getCurrentUser, tokenExistsAndNotExpired };
+export { useAuth, AuthProvider };
 
 export const ENDPOINT = '/Account';
 export const LOCAL_STORAGE_NAME = 'user';
