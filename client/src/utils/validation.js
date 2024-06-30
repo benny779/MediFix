@@ -6,7 +6,11 @@ export const isValidEmail = (email) => {
     );
 };
 
+export const isNotValidEmail = (email) => !isValidEmail(email);
+
 export const isValidPassword = (password) => {
+  if (!password) return false;
+
   let strength = 0;
   if (password.match(/[a-z]+/)) {
     strength += 1;
@@ -18,5 +22,7 @@ export const isValidPassword = (password) => {
     strength += 1;
   }
 
-  return password?.length >= 8 && strength >= 3;
+  return password.length >= 8 && strength >= 3;
 };
+
+export const isNotValidPassword = (password) => !isValidPassword(password);
