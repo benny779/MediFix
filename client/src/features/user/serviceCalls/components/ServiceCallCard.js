@@ -12,7 +12,7 @@ const ServiceCallCard = (props) => {
 
   const title = `${row.category.name} | ${row.subCategory.name}`;
   const dateCreated = `Created at ${formatJsonDateTime(row.dateCreated)}`;
-  const currentStatus = `${row.currentStatus.value} (${formatJsonDateTime(
+  const currentStatus = `${row.currentStatus.status.name} (${formatJsonDateTime(
     row.currentStatus.dateTime
   )})`;
   const subTitle = (
@@ -28,7 +28,7 @@ const ServiceCallCard = (props) => {
         <CardHeader
           title={title}
           subheader={subTitle}
-          action={<Chip size='small' label={row.serviceCallType.name} />}
+          action={<Chip size='small' label={row.type.name} />}
         />
 
         <CardContent>

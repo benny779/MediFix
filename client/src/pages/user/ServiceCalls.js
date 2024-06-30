@@ -1,21 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PageContainer from '../../layouts/PageContainer';
-import {
-  CreateServiceCallForm,
-  ServiceCallCard,
-  CardView,
-  ServiceCallsTable,
-} from '../../features/user/serviceCalls';
+import { CardView, ServiceCallsTable } from '../../features/user/serviceCalls';
 import { Box, Fab, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import fabStyle from '../../components/fabStyle';
 import TableRowsIcon from '@mui/icons-material/TableRows';
 import AppsIcon from '@mui/icons-material/Apps';
+import useApiClient from '../../api';
+import { useAuth } from '../../features/authentication';
+import { useAlert } from '../../context/AlertContext';
+
+const ENDPOINT = 'ServiceCalls/';
 
 const ServiceCalls = () => {
   const [displayMode, setDisplayMode] = useState('table');
+  const { get, isLoading, isSuccess, error, response } = useApiClient();
+  const { user } = useAuth();
+  const { displayAlert } = useAlert();
+
+  useEffect(() => {
+    const fetch = async () => await get(ENDPOINT, { clientId: user.sub });
+    fetch();
+  }, []);
 
   const handleDisplayMode = (e, value) => setDisplayMode(value);
+
+  useEffect(() => {
+    error && displayAlert(error);
+  }, [displayAlert, error]);
 
   return (
     <PageContainer>
@@ -34,7 +46,13 @@ const ServiceCalls = () => {
         </ToggleButtonGroup>
       </Box>
 
-      {displayMode === 'table' ? <ServiceCallsTable /> : <CardView />}
+      {isLoading ? (
+        <h1>Loading...</h1>
+      ) : !isSuccess ? null : displayMode === 'table' ? (
+        <ServiceCallsTable serviceCalls={response} />
+      ) : (
+        <CardView serviceCalls={response} />
+      )}
 
       {/* <CreateServiceCallForm/> */}
       <Fab color='primary' style={fabStyle}>

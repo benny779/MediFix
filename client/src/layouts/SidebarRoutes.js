@@ -6,13 +6,13 @@ export const regularUser = [
       id: 1,
       text: 'Service Calls',
       icon: <InboxIcon />,
-      path: '/',
+      path: '/serviceCalls',
     },
     {
       id: 2,
       text: 'Open New Service Call',
       icon: <InboxIcon />,
-      path: '/',
+      path: '/serviceCalls/new',
     },
   ],
   [

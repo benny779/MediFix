@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -12,9 +11,9 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import demo from '../demo.json';
 import { formatJsonDateTime } from '../../../../utils/dateHelper';
 import { Tooltip } from '@mui/material';
+import { Fragment, useState } from 'react';
 
 const tableHeaders = [
   'Category',
@@ -28,7 +27,7 @@ const tableHeaders = [
 
 function Row(props) {
   const { row } = props;
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
   const { location } = row;
   const building = location.building.name;
@@ -37,13 +36,16 @@ function Row(props) {
   const room = location.room.name;
 
   const category = `${row.category.name} | ${row.subCategory.name}`;
+  const depAndRoom = `${department} - ${room}`
   const locationString = `Building ${building}, Floor ${floor}, ${department}, Room ${room}`;
 
   const closedDateTime =
-    row.currentStatus.id === 4 && formatJsonDateTime(row.currentStatus.dateTime);
+    row.currentStatus.status.value === 4 /*Closed*/
+      ? formatJsonDateTime(row.currentStatus.dateTime)
+      : null;
 
   return (
-    <React.Fragment>
+    <Fragment>
       <TableRow hover sx={{ '& > *': { borderBottom: 'unset' }, cursor: 'pointer' }}>
         <TableCell>
           <IconButton aria-label='expand row' size='small' onClick={() => setOpen(!open)}>
@@ -55,10 +57,10 @@ function Row(props) {
         <TableCell>{closedDateTime}</TableCell>
         <TableCell>{row.details}</TableCell>
         <Tooltip title={locationString}>
-          <TableCell>{row.location.id}</TableCell>
+          <TableCell>{depAndRoom}</TableCell>
         </Tooltip>
-        <TableCell>{row.currentStatus.value}</TableCell>
-        <TableCell>{row.techinician.name}</TableCell>
+        <TableCell>{row.currentStatus.status.name}</TableCell>
+        <TableCell>{row.practitioner?.fullName}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -70,35 +72,30 @@ function Row(props) {
               <Table size='small' aria-label='purchases'>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Date</TableCell>
                     <TableCell>Status</TableCell>
+                    <TableCell>Date</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.statuses
-                    .sort((left, right) => left.id - right.id)
-                    .map((historyRow) => (
-                      <TableRow key={historyRow.id}>
-                        <TableCell component='th' scope='row'>
-                          {historyRow.value}
-                        </TableCell>
-                        <TableCell>{formatJsonDateTime(historyRow.dateTime)}</TableCell>
-                      </TableRow>
-                    ))}
+                  {row.statusUpdates.map((historyRow) => (
+                    <TableRow key={historyRow.dateTime}>
+                      <TableCell component='th' scope='row'>
+                        {historyRow.status.name}
+                      </TableCell>
+                      <TableCell>{formatJsonDateTime(historyRow.dateTime)}</TableCell>
+                    </TableRow>
+                  ))}
                 </TableBody>
               </Table>
             </Box>
           </Collapse>
         </TableCell>
       </TableRow>
-    </React.Fragment>
+    </Fragment>
   );
 }
 
-const rows = demo;
-console.log(rows);
-
-export default function ServiceCallsTable() {
+export default function ServiceCallsTable({ serviceCalls }) {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden', maxHeight: '82vh' }}>
       <TableContainer sx={{ maxHeight: '100%' }}>
@@ -112,8 +109,8 @@ export default function ServiceCallsTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <Row key={row.serviceCallId} row={row} />
+            {serviceCalls.serviceCalls.map((row) => (
+              <Row key={row.Id} row={row} />
             ))}
           </TableBody>
         </Table>
