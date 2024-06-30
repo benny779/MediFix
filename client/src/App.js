@@ -16,7 +16,7 @@ function App() {
 
         {/* private routes */}
         <Route element={<PrivateRoutes />}>
-          <Route path='/' element={<h1>Home</h1>} />
+          <Route path='/' element={<ServiceCalls />} />
           <Route path='/serviceCalls'>
             <Route index element={<ServiceCalls />} exact />
             <Route path='new' element={<CreateServiceCallForm />} exact />

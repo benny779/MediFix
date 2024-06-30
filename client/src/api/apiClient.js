@@ -1,38 +1,46 @@
-import { useEffect, useState } from 'react';
-import { useAxios } from './axios';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Axios from 'axios';
+import { axios } from './axios';
 
 const useApiClient = () => {
-  const axios = useAxios();
-
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  let controller = new AbortController();
+  const controllerRef = useRef(new AbortController());
 
   useEffect(() => {
-    return () => controller?.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      controllerRef.current?.abort('Component unmounted');
+    };
   }, []);
 
-  const sendRequest = async ({ url, method, data = {}, params = {} }) => {
+  const sendRequest = useCallback(async ({ url, method, data = {}, params = {} }) => {
     setIsLoading(true);
+    setError(null);
+    setIsSuccess(false);
 
-    controller.abort();
-    controller = new AbortController();
+    controllerRef.current?.abort('New request initiated');
+    controllerRef.current = new AbortController();
 
     try {
-      const result = await axios({ url, method, data, params, signal: controller.signal });
+      const result = await axios({
+        url,
+        method,
+        data,
+        params,
+        signal: controllerRef.current.signal,
+      });
 
       setResponse(result.data);
       setIsSuccess(true);
 
-      return { response: result.data, error: null, isSuccess: true, isLoading };
+      return { response: result.data, error: null, isSuccess: true, isLoading: false };
     } catch (ex) {
       if (Axios.isCancel(ex)) {
         console.error(ex.message);
+        return { response: null, error: ex.message, isSuccess: false, isLoading: false };
       } else {
         const errorResponse = ex.response?.data || {
           status: ex.response?.status || 500,
@@ -42,12 +50,12 @@ const useApiClient = () => {
 
         setError(errorResponse);
 
-        return { response: null, error: errorResponse, isSuccess: false, isLoading };
+        return { response: null, error: errorResponse, isSuccess: false, isLoading: false };
       }
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   const apiClient = {
     get: (url, params) => sendRequest({ method: 'GET', url, params }),
