@@ -27,7 +27,13 @@ export const setupAxiosInterceptors = (
     (response) => response,
     async (error) => {
       const originalRequest = error.config;
-      if (error.response?.status === 401 && !originalRequest._retry) {
+      
+      const needsRefresh =
+        error.response?.status === 401 &&
+        !originalRequest.url === '/Account/login' &&
+        !originalRequest._retry;
+
+      if (needsRefresh) {
         originalRequest._retry = true;
         try {
           const response = await axios.post('Account/refresh', {
