@@ -1,10 +1,38 @@
-import React, { createContext, useState, useCallback, useContext } from 'react';
+import { createContext, useState, useCallback, useContext, Fragment } from 'react';
 import Alert from '@mui/material/Alert'; // Assuming you're using MUI for Alert component
 
 const AlertContext = createContext();
 
 export const AlertProvider = ({ children }) => {
   const [alert, setAlert] = useState(null);
+
+  const getAlert = () => {
+    const { text } = alert;
+
+    if (typeof text !== 'object') {
+      return text;
+    }
+
+    if (text?.status === 400 && text.errors) {
+      const { errors } = text;
+      const errorMessages = Object.entries(errors)
+        .map(([field, messages]) => `${field}: ${messages.join(', ')}`)
+        .join('\n');
+
+      return (
+        <>
+          {errorMessages.split('\n').map((msg, index) => (
+            <Fragment key={index}>
+              {msg}
+              <br />
+            </Fragment>
+          ))}
+        </>
+      );
+    }
+
+    return text.details || 'Invalid error.';
+  };
 
   const displayAlert = useCallback((text, options = {}) => {
     const { severity = 'error', timeout = 10_000 } = options;
@@ -28,7 +56,7 @@ export const AlertProvider = ({ children }) => {
             setAlert(null);
           }}
           sx={{ position: 'fixed', bottom: 40, right: 40 }}>
-          {alert.text}
+          {getAlert()}
         </Alert>
       )}
     </AlertContext.Provider>
