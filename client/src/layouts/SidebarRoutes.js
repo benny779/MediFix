@@ -20,7 +20,7 @@ export const regularUser = [
       id: 3,
       text: 'Service Calls',
       icon: <InboxIcon />,
-      path: '/',
+      path: '/serviceCalls',
     },
   ],
 ];
