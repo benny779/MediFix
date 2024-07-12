@@ -17,8 +17,8 @@ const LoginForm = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
 
-  const [email, setEmail] = useState('a@a.com');
-  const [password, setPassword] = useState('Aq1234856');
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
