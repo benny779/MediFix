@@ -7,10 +7,10 @@ import { AuthProvider } from './features/authentication';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AuthProvider>
-    <React.StrictMode>
+    {/* <React.StrictMode> */}
       <AlertProvider>
         <App />
       </AlertProvider>
-    </React.StrictMode>
+    {/* </React.StrictMode> */}
   </AuthProvider>
 );
