@@ -8,21 +8,21 @@ const useApiClient = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const controllerRef = useRef(new AbortController());
+  // const controllerRef = useRef(new AbortController());
 
-  useEffect(() => {
-    return () => {
-      controllerRef.current?.abort('Component unmounted');
-    };
-  }, []);
+  // useEffect(() => {
+  //   return () => {
+  //     controllerRef.current?.abort('Component unmounted');
+  //   };
+  // }, []);
 
   const sendRequest = useCallback(async ({ url, method, data = {}, params = {} }) => {
     setIsLoading(true);
     setError(null);
     setIsSuccess(false);
 
-    controllerRef.current?.abort('New request initiated');
-    controllerRef.current = new AbortController();
+    // controllerRef.current?.abort('New request initiated');
+    // controllerRef.current = new AbortController();
 
     try {
       const result = await axios({
@@ -30,7 +30,7 @@ const useApiClient = () => {
         method,
         data,
         params,
-        signal: controllerRef.current.signal,
+        // signal: controllerRef.current.signal,
       });
 
       setResponse(result.data);

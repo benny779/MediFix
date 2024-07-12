@@ -11,10 +11,12 @@ import {
   Stack,
   TextField,
 } from '@mui/material';
-import React, { useState } from 'react';
-import locations from '../locations.json';
+import React, { useEffect, useState } from 'react';
+import useApiClient from '../../../../api/apiClient';
 import { useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
+import { useAuth } from '../../../authentication';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const detailsTextFieldRows = 5;
 const marginBetweenFormGroups = 3;
@@ -28,54 +30,129 @@ const CreateServiceCallForm = () => {
     getValues,
   } = useForm();
 
-  const [buildings] = useState(locations.buildings.map((b) => ({ id: b.id, name: b.name })));
+  const apiClient = useApiClient();
+  const { user } = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
+
+  const [buildings, setBuildings] = useState([]);
   const [floors, setFloors] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [rooms, setRooms] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
 
-  const handleBuildingChange = (buildingId) => {
-    const selectedBuilding = locations.buildings.find((building) => building.id === buildingId);
-    const floors = selectedBuilding.floors.map((f) => ({ id: f.id, name: f.name }));
-    setFloors(floors);
+  const handleBuildingChange = async (buildingId) => {
+    await fetchFloors(buildingId);
     setDepartments([]);
     setRooms([]);
   };
 
-  const handleFloorChange = (floorId) => {
-    const selectedBuilding = locations.buildings.find(
-      (building) => building.id === getValues('building')
-    );
-    const selectedFloor = selectedBuilding.floors.find((floor) => floor.id === floorId);
-    const departments = selectedFloor.departments.map((dep) => ({ id: dep.id, name: dep.name }));
-    setDepartments(departments);
+  const handleFloorChange = async (floorId) => {
+    await fetchDepartments(floorId);
     setRooms([]);
   };
 
-  const handleDepartmentChange = (departmentId) => {
-    const selectedBuilding = locations.buildings.find(
-      (building) => building.id === getValues('building')
-    );
-    const selectedFloor = selectedBuilding.floors.find((floor) => floor.id === getValues('floor'));
-    const selectedDepartment = selectedFloor.departments.find((dep) => dep.id === departmentId);
-    const rooms = selectedDepartment.rooms.map((room) => ({ id: room.id, name: room.name }));
-    setRooms(rooms);
+  const handleDepartmentChange = async (departmentId) => {
+    await fetchRooms(departmentId);
   };
 
-  const onSubmit = (data) => console.log(data);
+  const handleCategoryChange = async (catId) => {
+    console.log(catId);
+    await fetchSubCategories(catId);
+  };
+
+  const fetchBuildings = async () => {
+    const { isSuccess, response, error } = await apiClient.get('Locations/types/1');
+
+    if (isSuccess) {
+      setBuildings(response.locations);
+    }
+  };
+
+  const fetchFloors = async (buildingId) => {
+    const { isSuccess, response, error } = await apiClient.get(`Locations/${buildingId}/children`);
+
+    if (isSuccess) {
+      setFloors(response.values);
+    }
+  };
+
+  const fetchDepartments = async (floorId) => {
+    const { isSuccess, response, error } = await apiClient.get(`Locations/${floorId}/children`);
+
+    if (isSuccess) {
+      setDepartments(response.values);
+    }
+  };
+
+  const fetchRooms = async (depId) => {
+    const { isSuccess, response, error } = await apiClient.get(`Locations/${depId}/children`);
+
+    if (isSuccess) {
+      setRooms(response.values);
+    }
+  };
+
+  const fetchCategories = async () => {
+    const { isSuccess, response, error } = await apiClient.get(`Categories`);
+
+    if (isSuccess) {
+      setCategories(response.categories);
+    }
+  };
+
+  const fetchSubCategories = async (categoryId) => {
+    const { isSuccess, response, error } = await apiClient.get(`SubCategories?categoryId=${categoryId}`);
+
+    if (isSuccess) {
+      setSubCategories(response.categories);
+    }
+  };
+
+  useEffect(() => {
+    const init = async () => {
+      await fetchBuildings();
+      await fetchCategories();
+    };
+
+    init();
+  }, []);
+
+  const onSubmit = async (data) => {
+    const serviceCall = {
+      clientId: user.sub,
+      locationId: data.room,
+      serviceCallType: data.type,
+      subCategoryId: data.subCategory,
+      details: data.details,
+      priority: data.priority,
+    };
+
+    const { isSuccess, response, error } = await apiClient.post('ServiceCalls', serviceCall);
+    
+    
+      // TODO: navigate to ServiceCalls
+      isSuccess && navigate(from, { replace: true });
+   
+  };
 
   return (
     <>
-      <Grid container spacing={0} direction='column' alignItems='center' justifyContent='center'>
+      <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center">
         <Paper sx={{ padding: 2 }}>
           <form noValidate onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={3} direction={{ xs: 'column', md: 'row' }} marginBottom={2}>
               <FormControl fullWidth>
                 <InputLabel>Building</InputLabel>
                 <Select
-                  label='Building'
+                  label="Building"
                   {...register('building', { required: 'Building is required' })}
                   onChange={(e) => handleBuildingChange(e.target.value)}
-                  error={!!errors.building}>
+                  error={!!errors.building}
+                >
                   {buildings.map((b) => (
                     <MenuItem key={b.id} value={b.id}>
                       {b.name}
@@ -87,10 +164,7 @@ const CreateServiceCallForm = () => {
 
               <FormControl fullWidth>
                 <InputLabel>Floor</InputLabel>
-                <Select
-                  label='Floor'
-                  {...register('floor')}
-                  onChange={(e) => handleFloorChange(e.target.value)}>
+                <Select label="Floor" {...register('floor')} onChange={(e) => handleFloorChange(e.target.value)}>
                   {floors.map((f) => (
                     <MenuItem key={f.id} value={f.id}>
                       {f.name}
@@ -103,9 +177,10 @@ const CreateServiceCallForm = () => {
               <FormControl fullWidth>
                 <InputLabel>Department</InputLabel>
                 <Select
-                  label='Department'
+                  label="Department"
                   {...register('department')}
-                  onChange={(e) => handleDepartmentChange(e.target.value)}>
+                  onChange={(e) => handleDepartmentChange(e.target.value)}
+                >
                   {departments.map((dep) => (
                     <MenuItem key={dep.id} value={dep.id}>
                       {dep.name}
@@ -115,13 +190,10 @@ const CreateServiceCallForm = () => {
                 {/* <FormHelperText>With label + helper text</FormHelperText> */}
               </FormControl>
             </Stack>
-            <Stack
-              spacing={3}
-              direction={{ xs: 'column', md: 'row' }}
-              marginBottom={marginBetweenFormGroups}>
+            <Stack spacing={3} direction={{ xs: 'column', md: 'row' }} marginBottom={marginBetweenFormGroups}>
               <FormControl fullWidth sx={{ width: 320 }}>
                 <InputLabel>Room</InputLabel>
-                <Select label='Room' {...register('room')}>
+                <Select label="Room" {...register('room')}>
                   {rooms.map((room) => (
                     <MenuItem key={room.id} value={room.id}>
                       {room.name}
@@ -131,30 +203,90 @@ const CreateServiceCallForm = () => {
                 {/* <FormHelperText>With label + helper text</FormHelperText> */}
               </FormControl>
 
-              <TextField label='Location details' type='text' fullWidth />
+              {/* <TextField label="Location details" type="text" fullWidth /> */}
             </Stack>
 
             <Divider sx={{ marginBottom: marginBetweenFormGroups }} />
 
-            <Stack
-              spacing={3}
-              direction={{ xs: 'column', md: 'row' }}
-              marginBottom={marginBetweenFormGroups}>
-              <TextField label='Type' type='text' />
-              <TextField label='Category' type='text' />
-              <TextField label='Sub Category' type='text' />
+            <Stack spacing={3} direction={{ xs: 'column', md: 'row' }} marginBottom={marginBetweenFormGroups}>
+              <FormControl>
+                <InputLabel>Type</InputLabel>
+                <Select label="Type" {...register('type', { required: 'type is required' })} error={!!errors.type}>
+                  {[
+                    { name: 'New', value: 1 },
+                    { name: 'Repair', value: 2 },
+                  ].map((t) => (
+                    <MenuItem key={t.value} value={t.value}>
+                      {t.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>{errors.type?.message}</FormHelperText>
+              </FormControl>
+
+              <FormControl>
+                <InputLabel>Category</InputLabel>
+                <Select
+                  label="Category"
+                  {...register('category', { required: 'category is required' })}
+                  onChange={(e) => handleCategoryChange(e.target.value)}
+                  error={!!errors.category}
+                >
+                  {categories.map((c) => (
+                    <MenuItem key={c.id} value={c.id}>
+                      {c.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>{errors.category?.message}</FormHelperText>
+              </FormControl>
+
+              <FormControl>
+                <InputLabel>Sub Category</InputLabel>
+                <Select
+                  label="Sub Category"
+                  {...register('subCategory', { required: 'sub category is required' })}
+                  error={!!errors.subCategory}
+                >
+                  {subCategories.map((sc) => (
+                    <MenuItem key={sc.id} value={sc.id}>
+                      {sc.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>{errors.subCategory?.message}</FormHelperText>
+              </FormControl>
             </Stack>
 
             <Divider sx={{ marginBottom: marginBetweenFormGroups }} />
 
             <Stack marginBottom={4}>
-              <TextField placeholder='Service call details' multiline rows={detailsTextFieldRows} />
+              <TextField
+                placeholder="Service call details"
+                multiline
+                rows={detailsTextFieldRows}
+                {...register('details')}
+              />
             </Stack>
             <Stack spacing={3} direction={{ xs: 'column', md: 'row' }} marginBottom={2}>
-              <TextField label='Priority' />
+              <FormControl>
+                <InputLabel>Priority</InputLabel>
+                <Select label="Priority" {...register('priority', { required: 'Priority is required' })}>
+                  {[
+                    { name: 'Low', value: 1 },
+                    { name: 'Medium', value: 2 },
+                    { name: 'High', value: 3 },
+                    { name: 'Critical', value: 4 },
+                  ].map((p) => (
+                    <MenuItem key={p.value} value={p.value}>
+                      {p.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Stack>
             <Stack direction={'row-reverse'}>
-              <Button type='submit' variant='contained' size='large' sx={{ paddingInline: 5 }}>
+              <Button type="submit" variant="contained" size="large" sx={{ paddingInline: 5 }}>
                 Send
               </Button>
             </Stack>
