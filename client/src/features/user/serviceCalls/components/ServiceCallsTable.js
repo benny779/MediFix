@@ -15,15 +15,7 @@ import { formatJsonDateTime } from '../../../../utils/dateHelper';
 import { Tooltip } from '@mui/material';
 import { Fragment, useState } from 'react';
 
-const tableHeaders = [
-  'Category',
-  'Created',
-  'Closed',
-  'Details',
-  'Location',
-  'Status',
-  'Technician',
-];
+const tableHeaders = ['Category', 'Created', 'Closed', 'Details', 'Location', 'Status', 'Technician'];
 
 function Row(props) {
   const { row } = props;
@@ -36,22 +28,16 @@ function Row(props) {
   const room = location.room.name;
 
   const category = `${row.category.name} | ${row.subCategory.name}`;
-  const depAndRoom = `${department} - ${room}`
+  const depAndRoom = `${department} - ${room}`;
   const locationString = `Building ${building}, Floor ${floor}, ${department}, Room ${room}`;
 
   const closedDateTime =
-    row.currentStatus.status.value === 4 /*Closed*/
-      ? formatJsonDateTime(row.currentStatus.dateTime)
-      : null;
+    row.currentStatus.status.value === 4 /*Closed*/ ? formatJsonDateTime(row.currentStatus.dateTime) : null;
 
   return (
     <Fragment>
       <TableRow hover sx={{ '& > *': { borderBottom: 'unset' }, cursor: 'pointer' }}>
-        <TableCell>
-          <IconButton aria-label='expand row' size='small' onClick={() => setOpen(!open)}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
+        <TableCell></TableCell>
         <TableCell>{category}</TableCell>
         <TableCell>{formatJsonDateTime(row.dateCreated)}</TableCell>
         <TableCell>{closedDateTime}</TableCell>
@@ -59,17 +45,22 @@ function Row(props) {
         <Tooltip title={locationString}>
           <TableCell>{depAndRoom}</TableCell>
         </Tooltip>
-        <TableCell>{row.currentStatus.status.name}</TableCell>
+        <TableCell>
+          {row.currentStatus.status.name}
+          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
         <TableCell>{row.practitioner?.fullName}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
-          <Collapse in={open} timeout='auto' unmountOnExit>
+          <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant='h6' gutterBottom component='div'>
+              <Typography variant="h6" gutterBottom component="div">
                 Status History
               </Typography>
-              <Table size='small' aria-label='purchases'>
+              <Table size="small" aria-label="purchases">
                 <TableHead>
                   <TableRow>
                     <TableCell>Status</TableCell>
@@ -79,7 +70,7 @@ function Row(props) {
                 <TableBody>
                   {row.statusUpdates.map((historyRow) => (
                     <TableRow key={historyRow.dateTime}>
-                      <TableCell component='th' scope='row'>
+                      <TableCell component="th" scope="row">
                         {historyRow.status.name}
                       </TableCell>
                       <TableCell>{formatJsonDateTime(historyRow.dateTime)}</TableCell>
