@@ -24,7 +24,7 @@ const RegisterForm = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
+  const from = location.state?.from?.pathname || '/login';
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
