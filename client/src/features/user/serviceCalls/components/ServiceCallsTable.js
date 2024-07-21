@@ -14,13 +14,21 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { formatJsonDateTime } from '../../../../utils/dateHelper';
 import { Tooltip } from '@mui/material';
 import { Fragment, useState } from 'react';
+import { lightGreen, yellow } from '@mui/material/colors';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CreateIcon from '@mui/icons-material/Create';
+import CableIcon from '@mui/icons-material/Cable';
 
-const tableHeaders = ['Category', 'Created', 'Closed', 'Details', 'Location', 'Status', 'Technician'];
+const tableHeaders = ['Category', 'Created', 'Closed', 'Details', 'Location', 'Status', 'Technician', ''];
 
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = useState(false);
-
+  const green = lightGreen.A400;
+  const myYellow = yellow[400];
+  const deleteTitleString = 'Cannot be cancelled Already belongs to the technician';
+  const editTitleString = 'This call cannot be edited due to being assigned to a technician';
+  const associateTitleString = 'This call cannot be assigned to an already assigned heel technician'
   const { location } = row;
   const building = location.building.name;
   const floor = location.floor.name;
@@ -34,9 +42,32 @@ function Row(props) {
   const closedDateTime =
     row.currentStatus.status.value === 4 /*Closed*/ ? formatJsonDateTime(row.currentStatus.dateTime) : null;
 
+  const handleRowClick = () => {
+    console.log('Row clicked:', row);
+    // Add your row click logic here
+  };
+
+  const handleDelete = (event) => {
+    event.stopPropagation();
+    console.log('Cancelation service call:', row.Id);
+    // Add your delete logic here
+  };
+
+  const handleEdit = (event) => {
+    event.stopPropagation();
+    console.log('Edit service call:', row.Id);
+    // Add your edit logic here
+  };
+
+  const handleAssociate = (event) => {
+    event.stopPropagation();
+    console.log('Associate service call:', row.Id);
+    // Add your association logic here
+  };
+
   return (
     <Fragment>
-      <TableRow hover sx={{ '& > *': { borderBottom: 'unset' }, cursor: 'pointer' }}>
+      <TableRow hover sx={{ '& > *': { borderBottom: 'unset' }, cursor: 'pointer' }} onClick={handleRowClick}>
         <TableCell></TableCell>
         <TableCell>{category}</TableCell>
         <TableCell>{formatJsonDateTime(row.dateCreated)}</TableCell>
@@ -52,6 +83,57 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell>{row.practitioner?.fullName}</TableCell>
+        <TableCell> 
+          {row.practitioner ? (
+            <Tooltip title={deleteTitleString}>
+              <span>
+                <IconButton disabled>
+                  <DeleteIcon />
+                </IconButton>
+              </span>
+            </Tooltip>
+          ) : (
+            <Tooltip title={'Cancelation Service Call'}>
+              {' '}
+              <IconButton aria-label="Cancelation" sx={{ color: green }} onClick={handleDelete}>
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+
+          {row.practitioner ? (
+            <Tooltip title={editTitleString}>
+              <span>
+                <IconButton disabled>
+                  <CreateIcon />
+                </IconButton>
+              </span>
+            </Tooltip>
+          ) : (
+            <Tooltip title={'Edit Service Call'}>
+              {' '}
+              <IconButton aria-label="create" sx={{ color: myYellow }} onClick={handleEdit}>
+                <CreateIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+          {row.practitioner ? (
+            <Tooltip title={associateTitleString}>
+              <span>
+                <IconButton disabled>
+                  <CableIcon />
+                </IconButton>
+              </span>
+            </Tooltip>
+          ) : (
+            <Tooltip title={'Associate Service Call'}>
+              {' '}
+              <IconButton aria-label="associate" sx={{ color: myYellow }} onClick={handleAssociate}>
+                <CableIcon />
+              </IconButton>
+            </Tooltip>
+          )}
+        </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -88,7 +170,7 @@ function Row(props) {
 
 export default function ServiceCallsTable({ serviceCalls }) {
   return (
-    <Paper sx={{ width: '100%', overflow: 'hidden', maxHeight: '82vh' }}>
+    <Paper sx={{ width: '100%', overflow: 'hidden', maxHeight: '100%' }}>
       <TableContainer sx={{ maxHeight: '100%' }}>
         <Table stickyHeader>
           <TableHead>
