@@ -10,7 +10,9 @@ export function useAuth() {
 
   const register = useCallback(
     async (registerObj) => {
-      return await apiClient.post(`${ENDPOINT}/register`, registerObj);
+      const { isSuccess, error } = await apiClient.post(`${ENDPOINT}/register`, registerObj);
+
+      return { isSuccess, error };
     },
     [apiClient]
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Stack, TextField, Divider, InputAdornment, IconButton } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -6,10 +6,12 @@ import { isValidEmail, isValidPassword } from '../utils/validation';
 import AuthLayout from '../layouts/AuthLayout';
 import { useAlert } from '../context/AlertContext';
 import { useAuth } from '../features/authentication';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const RegisterForm = () => {
-  const { register, success, error, response } = useAuth();
+  const { register } = useAuth();
   const { displayAlert } = useAlert();
+  const [errorMessage, setErrorMessage] = useState();
 
   const [firstName, setfirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -19,6 +21,10 @@ const RegisterForm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/';
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -41,16 +47,15 @@ const RegisterForm = () => {
       phoneNumber: phone,
     };
 
-    await register(registerObj);
+    const { isSuccess, error } = await register(registerObj);
+    setErrorMessage(error);
 
-    if (!success) {
-      displayAlert(error.detail);
-      return;
-    }
-
-    const { id } = response;
-    displayAlert(id);
+    isSuccess && navigate(from, { replace: true });
   };
+
+  useEffect(() => {
+    errorMessage && displayAlert(errorMessage);
+  }, [displayAlert, errorMessage]);
 
   return (
     <AuthLayout header='Register Form' bottomButton={{ text: 'Login', target: '/login' }}>
