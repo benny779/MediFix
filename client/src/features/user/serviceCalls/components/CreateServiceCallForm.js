@@ -105,8 +105,7 @@ const CreateServiceCallForm = () => {
   };
 
   const fetchSubCategories = async (categoryId) => {
-    const { isSuccess, response, error } = await apiClient.get(`SubCategories?categoryId=${categoryId}`);
-
+    const { isSuccess, response, error } = await apiClient.get(`SubCategories/${categoryId}`);
     if (isSuccess) {
       setSubCategories(response.categories);
     }
@@ -132,11 +131,9 @@ const CreateServiceCallForm = () => {
     };
 
     const { isSuccess, response, error } = await apiClient.post('ServiceCalls', serviceCall);
-    
-    
-      // TODO: navigate to ServiceCalls
-      isSuccess && navigate(from, { replace: true });
-   
+
+    // TODO: navigate to ServiceCalls
+    isSuccess && navigate(from, { replace: true });
   };
 
   return (
@@ -209,7 +206,7 @@ const CreateServiceCallForm = () => {
             <Divider sx={{ marginBottom: marginBetweenFormGroups }} />
 
             <Stack spacing={3} direction={{ xs: 'column', md: 'row' }} marginBottom={marginBetweenFormGroups}>
-              <FormControl>
+              <FormControl fullWidth>
                 <InputLabel>Type</InputLabel>
                 <Select label="Type" {...register('type', { required: 'type is required' })} error={!!errors.type}>
                   {[
@@ -223,8 +220,9 @@ const CreateServiceCallForm = () => {
                 </Select>
                 <FormHelperText>{errors.type?.message}</FormHelperText>
               </FormControl>
-
-              <FormControl>
+            </Stack>
+            <Stack spacing={3} direction={{ xs: 'column', md: 'row' }} marginBottom={marginBetweenFormGroups}>
+              <FormControl fullWidth>
                 <InputLabel>Category</InputLabel>
                 <Select
                   label="Category"
@@ -241,7 +239,7 @@ const CreateServiceCallForm = () => {
                 <FormHelperText>{errors.category?.message}</FormHelperText>
               </FormControl>
 
-              <FormControl>
+              <FormControl fullWidth>
                 <InputLabel>Sub Category</InputLabel>
                 <Select
                   label="Sub Category"
@@ -269,7 +267,7 @@ const CreateServiceCallForm = () => {
               />
             </Stack>
             <Stack spacing={3} direction={{ xs: 'column', md: 'row' }} marginBottom={2}>
-              <FormControl>
+              <FormControl fullWidth>
                 <InputLabel>Priority</InputLabel>
                 <Select label="Priority" {...register('priority', { required: 'Priority is required' })}>
                   {[

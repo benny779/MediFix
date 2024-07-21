@@ -87,7 +87,7 @@ const menuItems = regularUser;
 
 export default function PageContainer({children}) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   const navigate = useNavigate();
 
