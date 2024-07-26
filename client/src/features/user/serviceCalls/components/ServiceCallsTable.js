@@ -1,3 +1,4 @@
+import React, { useState, Fragment } from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -12,28 +13,32 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { formatJsonDateTime } from '../../../../utils/dateHelper';
-import { Tooltip } from '@mui/material';
-import { Fragment, useState } from 'react';
+import { Tooltip, Dialog } from '@mui/material';
 import { lightGreen, yellow } from '@mui/material/colors';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import CableIcon from '@mui/icons-material/Cable';
+import PractitionerAssociateComponent from './Associate'; // Ensure the path is correct
 
 const tableHeaders = ['Category', 'Created', 'Closed', 'Details', 'Location', 'Status', 'Technician', ''];
 
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = useState(false);
+  const [openAssociateDialog, setOpenAssociateDialog] = useState(false);
   const green = lightGreen.A400;
   const myYellow = yellow[400];
-  const deleteTitleString = 'Cannot be cancelled Already belongs to the technician';
+  const deleteTitleString = 'Cannot be canceled - Already assigned to a technician';
   const editTitleString = 'This call cannot be edited due to being assigned to a technician';
-  const associateTitleString = 'This call cannot be assigned to an already assigned heel technician'
+  const associateTitleString = 'This call cannot be assigned to an already assigned technician';
+
   const { location } = row;
   const building = location.building.name;
   const floor = location.floor.name;
   const department = location.department.name;
   const room = location.room.name;
+  const subCategoryId = row.subCategory.id;
+  const serviceCallId = row.id;
 
   const category = `${row.category.name} | ${row.subCategory.name}`;
   const depAndRoom = `${department} - ${room}`;
@@ -44,31 +49,42 @@ function Row(props) {
 
   const handleRowClick = () => {
     console.log('Row clicked:', row);
-    // Add your row click logic here
+    // Add logic to handle row click here
   };
 
   const handleDelete = (event) => {
     event.stopPropagation();
-    console.log('Cancelation service call:', row.Id);
-    // Add your delete logic here
+    console.log('Cancellation service call:', row.id);
+    // Add logic to delete the service call here
   };
 
   const handleEdit = (event) => {
     event.stopPropagation();
-    console.log('Edit service call:', row.Id);
-    // Add your edit logic here
+    console.log('Edit service call:', row.id);
+    // Add logic to edit the service call here
   };
 
   const handleAssociate = (event) => {
     event.stopPropagation();
-    console.log('Associate service call:', row.Id);
-    // Add your association logic here
+    console.log('Associate service call:', serviceCallId);
+    setOpenAssociateDialog(true);
   };
 
   return (
     <Fragment>
       <TableRow hover sx={{ '& > *': { borderBottom: 'unset' }, cursor: 'pointer' }} onClick={handleRowClick}>
-        <TableCell></TableCell>
+        <TableCell>
+          <IconButton
+            aria-label="expand row"
+            size="small"
+            onClick={(event) => {
+              event.stopPropagation();
+              setOpen(!open);
+            }}
+          >
+            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+          </IconButton>
+        </TableCell>
         <TableCell>{category}</TableCell>
         <TableCell>{formatJsonDateTime(row.dateCreated)}</TableCell>
         <TableCell>{closedDateTime}</TableCell>
@@ -76,14 +92,9 @@ function Row(props) {
         <Tooltip title={locationString}>
           <TableCell>{depAndRoom}</TableCell>
         </Tooltip>
-        <TableCell>
-          {row.currentStatus.status.name}
-          <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
-            {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-          </IconButton>
-        </TableCell>
+        <TableCell>{row.currentStatus.status.name}</TableCell>
         <TableCell>{row.practitioner?.fullName}</TableCell>
-        <TableCell> 
+        <TableCell>
           {row.practitioner ? (
             <Tooltip title={deleteTitleString}>
               <span>
@@ -93,8 +104,7 @@ function Row(props) {
               </span>
             </Tooltip>
           ) : (
-            <Tooltip title={'Cancelation Service Call'}>
-              {' '}
+            <Tooltip title={'Cancel Service Call'}>
               <IconButton aria-label="Cancelation" sx={{ color: green }} onClick={handleDelete}>
                 <DeleteIcon />
               </IconButton>
@@ -111,7 +121,6 @@ function Row(props) {
             </Tooltip>
           ) : (
             <Tooltip title={'Edit Service Call'}>
-              {' '}
               <IconButton aria-label="create" sx={{ color: myYellow }} onClick={handleEdit}>
                 <CreateIcon />
               </IconButton>
@@ -127,7 +136,6 @@ function Row(props) {
             </Tooltip>
           ) : (
             <Tooltip title={'Associate Service Call'}>
-              {' '}
               <IconButton aria-label="associate" sx={{ color: myYellow }} onClick={handleAssociate}>
                 <CableIcon />
               </IconButton>
@@ -136,7 +144,7 @@ function Row(props) {
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
           <Collapse in={open} timeout="auto" unmountOnExit>
             <Box sx={{ margin: 1 }}>
               <Typography variant="h6" gutterBottom component="div">
@@ -164,11 +172,18 @@ function Row(props) {
           </Collapse>
         </TableCell>
       </TableRow>
+      <Dialog open={openAssociateDialog} onClose={() => setOpenAssociateDialog(false)}>
+        <PractitionerAssociateComponent 
+          subCategoryId={subCategoryId}
+          serviceCallId={serviceCallId} 
+          onClose={() => setOpenAssociateDialog(false)}
+        />
+      </Dialog>
     </Fragment>
   );
 }
 
-export default function ServiceCallsTable({ serviceCalls }) {
+function ServiceCallsTable({ serviceCalls }) {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden', maxHeight: '100%' }}>
       <TableContainer sx={{ maxHeight: '100%' }}>
@@ -183,7 +198,7 @@ export default function ServiceCallsTable({ serviceCalls }) {
           </TableHead>
           <TableBody>
             {serviceCalls.serviceCalls.map((row) => (
-              <Row key={row.Id} row={row} />
+              <Row key={row.id} row={row} />
             ))}
           </TableBody>
         </Table>
@@ -191,3 +206,5 @@ export default function ServiceCallsTable({ serviceCalls }) {
     </Paper>
   );
 }
+
+export default ServiceCallsTable;
