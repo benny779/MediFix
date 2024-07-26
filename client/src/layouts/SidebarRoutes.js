@@ -1,4 +1,5 @@
 import InboxIcon from '@mui/icons-material/MoveToInbox';
+import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 
 export const regularUser = [
   [
@@ -11,7 +12,7 @@ export const regularUser = [
     {
       id: 2,
       text: 'Open New Service Call',
-      icon: <InboxIcon />,
+      icon: <AddIcCallIcon />,
       path: '/serviceCalls/new',
     },
   ],

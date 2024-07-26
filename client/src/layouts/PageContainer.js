@@ -5,7 +5,6 @@ import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import CssBaseline from '@mui/material/CssBaseline';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -15,8 +14,10 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import FiberNewIcon from '@mui/icons-material/FiberNew';
 import { regularUser } from './SidebarRoutes';
 import { useNavigate } from 'react-router-dom';
+import medifixLogo from '../features/authentication/assets/MediFix.svg';
 
 const drawerWidth = 240;
 
@@ -85,7 +86,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const menuItems = regularUser;
 
-export default function PageContainer({children}) {
+export default function PageContainer({ children }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
@@ -116,9 +117,45 @@ export default function PageContainer({children}) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            MediFix
-          </Typography>
+          <AppBar position="fixed" open={open}>
+  <Toolbar>
+    <IconButton
+      color="inherit"
+      aria-label="open drawer"
+      onClick={handleDrawerOpen}
+      edge="start"
+      sx={{
+        marginRight: 2,
+        ...(open && { display: 'none' }),
+      }}
+    >
+      <MenuIcon />
+    </IconButton>
+    <Box
+      sx={{
+        backgroundColor: 'white',
+        padding: '5px',
+        borderRadius: '5px',
+        marginRight: 2,
+        border: '1px solid #1976d2', // מסגרת כחולה זעירה
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <Box
+        component="img"
+        sx={{
+          height: 50,
+          width: 'auto',
+        }}
+        alt="MediFix Logo"
+        src={medifixLogo}
+      />
+    </Box>
+    {/* כאן אפשר להוסיף כותרת או אלמנטים נוספים */}
+  </Toolbar>
+</AppBar>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
