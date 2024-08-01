@@ -31,7 +31,7 @@ export const AlertProvider = ({ children }) => {
       );
     }
 
-    return text.detail || 'Invalid error.';
+    return text?.detail || 'Invalid error.';
   };
 
   const displayAlert = useCallback((text, options = {}) => {
