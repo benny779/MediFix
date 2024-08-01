@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import useApiClient from '../../../api';
 import { useAuthContext } from '../../../context/AuthContext';
 import { ENDPOINT } from '..';
@@ -7,6 +7,8 @@ export function useAuth() {
   const apiClient = useApiClient();
   const { user, accessToken, refreshToken, setAuthInfo, clearAuthInfo, isLoading } =
     useAuthContext();
+
+  const roles = useMemo(() => user?.roles?.split(',') || [], [user]);
 
   const register = useCallback(
     async (registerObj) => {
@@ -39,9 +41,9 @@ export function useAuth() {
 
   const hasRole = useCallback(
     (role) => {
-      return user?.roles?.includes(role);
+      return roles.includes(role);
     },
-    [user]
+    [roles]
   );
 
   return {
