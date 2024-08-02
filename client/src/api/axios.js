@@ -30,8 +30,8 @@ export const setupAxiosInterceptors = (
       
       const needsRefresh =
         error.response?.status === 401 &&
-        originalRequest.url !== '/Account/login' &&
-        originalRequest.url !== '/Account/refresh' &&
+        originalRequest.url !== 'Account/login' &&
+        originalRequest.url !== 'Account/refresh' &&
         !originalRequest._retry;
         
       if (needsRefresh) {
