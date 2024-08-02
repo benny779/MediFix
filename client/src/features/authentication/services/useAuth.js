@@ -48,6 +48,7 @@ export function useAuth() {
 
   return {
     user,
+    roles,
     accessToken,
     refreshToken,
     login,
