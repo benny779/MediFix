@@ -1,12 +1,13 @@
-import * as React from 'react';
+import React, { Fragment } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ServiceCalls from './pages/user/ServiceCalls';
-import ServiceCallsManager from './pages/user/ServiceCallsManager'
+import ServiceCallsManager from './pages/user/ServiceCallsManager';
 import { CreateServiceCallForm } from './features/user/serviceCalls';
 import PrivateRoutes from './PrivateRoutes';
 import { Navigate } from 'react-router-dom';
+import PageContainer from './layouts/PageContainer';
 
 function App() {
   return (
@@ -18,11 +19,13 @@ function App() {
 
         {/* private routes */}
         <Route element={<PrivateRoutes />}>
-          <Route path='/' element={<Navigate to='/serviceCalls' replace />} />
-          <Route path='/manager/serviceCalls' element = {<ServiceCallsManager/>}exact/>
-          <Route path='/serviceCalls'>
-            <Route index element={<ServiceCalls />} exact />
-            <Route path='new' element={<CreateServiceCallForm />} exact />
+          <Route element={<PageContainer />}>
+            <Route path='/' element={<Navigate to='/serviceCalls' replace />} />
+            <Route path='/manager/serviceCalls' element={<ServiceCallsManager />} exact />
+            <Route path='/serviceCalls'>
+              <Route index element={<ServiceCalls />} exact />
+              <Route path='new' element={<CreateServiceCallForm />} exact />
+            </Route>
           </Route>
         </Route>
 

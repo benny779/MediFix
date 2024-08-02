@@ -17,7 +17,6 @@ import { useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
 import { useAuth } from '../../../authentication';
 import { useLocation, useNavigate } from 'react-router-dom';
-import PageContainer from '../../../../layouts/PageContainer';
 import { useAlert } from '../../../../context/AlertContext';
 
 const detailsTextFieldRows = 5;
@@ -155,7 +154,6 @@ const CreateServiceCallForm = () => {
 
   return (
     <>
-      <PageContainer>
         <h3>Open New Service Call</h3>
         <Grid container spacing={0} direction='column' alignItems='center' justifyContent='center'>
           <Paper sx={{ padding: 2 }}>
@@ -345,7 +343,6 @@ const CreateServiceCallForm = () => {
           </Paper>
         </Grid>
         <DevTool control={control}></DevTool>
-      </PageContainer>
     </>
   );
 };

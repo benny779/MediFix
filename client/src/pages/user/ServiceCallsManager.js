@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PageContainer from '../../layouts/PageContainer';
 import { CardView, ServiceCallsTable } from '../../features/user/serviceCalls';
 import { Box, Fab, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -30,7 +29,7 @@ const ManagerServiceCalls = () => {
   }, [displayAlert, error]);
 
   return (
-    <PageContainer>
+    <>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 2 }}>
         <ToggleButtonGroup
           value={displayMode}
@@ -58,7 +57,7 @@ const ManagerServiceCalls = () => {
       <Fab color='primary' style={fabStyle}>
         <AddIcon />
       </Fab>
-    </PageContainer>
+    </>
   );
 };
 

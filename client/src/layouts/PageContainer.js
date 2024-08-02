@@ -16,7 +16,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import FiberNewIcon from '@mui/icons-material/FiberNew';
 import { regularUser } from './SidebarRoutes';
-import { useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import medifixLogo from '../features/authentication/assets/MediFix.svg';
 
 const drawerWidth = 240;
@@ -206,7 +206,7 @@ export default function PageContainer({ children }) {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
-        {children}
+        <Outlet />
       </Box>
     </Box>
   );

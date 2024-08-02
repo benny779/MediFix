@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PageContainer from '../../layouts/PageContainer';
 import { CardView, ServiceCallsTable } from '../../features/user/serviceCalls';
 import { Box, Fab, ToggleButton, ToggleButtonGroup, Typography, Link } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -26,6 +25,7 @@ const ServiceCalls = () => {
   useEffect(() => {
     const fetch = async () => await get(ENDPOINT, { clientId: user.sub });
     fetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDisplayMode = (e, value) => setDisplayMode(value);
@@ -40,7 +40,7 @@ const ServiceCalls = () => {
   }, [displayAlert, error]);
 
   return (
-    <PageContainer>
+    <>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 2 }}>
         <ToggleButtonGroup value={displayMode} exclusive onChange={handleDisplayMode} aria-label="text alignment">
           <ToggleButton value="table" aria-label="left aligned">
@@ -75,7 +75,7 @@ const ServiceCalls = () => {
       <Fab color="primary" style={fabStyle} onClick={handleNewServiceCall}>
         <AddIcon />
       </Fab>
-    </PageContainer>
+    </>
   );
 };
 
