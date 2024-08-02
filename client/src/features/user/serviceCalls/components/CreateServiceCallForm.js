@@ -1,5 +1,7 @@
 import {
+  Box,
   Button,
+  Container,
   Divider,
   FormControl,
   FormHelperText,
@@ -8,8 +10,8 @@ import {
   MenuItem,
   Paper,
   Select,
-  Stack,
   TextField,
+  Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import useApiClient from '../../../../api/apiClient';
@@ -20,7 +22,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useAlert } from '../../../../context/AlertContext';
 
 const detailsTextFieldRows = 5;
-const marginBetweenFormGroups = 3;
 
 const required = 'Required';
 
@@ -134,7 +135,7 @@ const CreateServiceCallForm = () => {
     };
 
     init();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onSubmit = async (data) => {
@@ -154,11 +155,15 @@ const CreateServiceCallForm = () => {
 
   return (
     <>
-        <h3>Open New Service Call</h3>
-        <Grid container spacing={0} direction='column' alignItems='center' justifyContent='center'>
-          <Paper sx={{ padding: 2 }}>
-            <form noValidate onSubmit={handleSubmit(onSubmit)}>
-              <Stack spacing={3} direction={{ xs: 'column', md: 'row' }} marginBottom={2}>
+      <Container maxWidth='md'>
+        <Paper elevation={3} sx={{ padding: { xs: 2, md: 4 }, marginY: 4 }}>
+          <Typography variant='h4' component='h1' gutterBottom marginBottom={2} align='center'>
+            Service Call Request
+          </Typography>
+          <form noValidate onSubmit={handleSubmit(onSubmit)}>
+            <Grid container spacing={3}>
+              {/* Building and Floor */}
+              <Grid item xs={12} md={6}>
                 <FormControl fullWidth>
                   <InputLabel>Building</InputLabel>
                   <Select
@@ -173,9 +178,10 @@ const CreateServiceCallForm = () => {
                       </MenuItem>
                     ))}
                   </Select>
-                  <FormHelperText>{errors.building?.message}</FormHelperText>
+                  <FormHelperText error>{errors.building?.message}</FormHelperText>
                 </FormControl>
-
+              </Grid>
+              <Grid item xs={12} md={6}>
                 <FormControl fullWidth>
                   <InputLabel>Floor</InputLabel>
                   <Select
@@ -190,9 +196,10 @@ const CreateServiceCallForm = () => {
                       </MenuItem>
                     ))}
                   </Select>
-                  {/* <FormHelperText>With label + helper text</FormHelperText> */}
                 </FormControl>
-
+              </Grid>
+              {/* Department and Room */}
+              <Grid item xs={12} md={6}>
                 <FormControl fullWidth>
                   <InputLabel>Department</InputLabel>
                   <Select
@@ -207,14 +214,10 @@ const CreateServiceCallForm = () => {
                       </MenuItem>
                     ))}
                   </Select>
-                  {/* <FormHelperText>With label + helper text</FormHelperText> */}
                 </FormControl>
-              </Stack>
-              <Stack
-                spacing={3}
-                direction={{ xs: 'column', md: 'row' }}
-                marginBottom={marginBetweenFormGroups}>
-                <FormControl fullWidth sx={{ width: 320 }}>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <FormControl fullWidth>
                   <InputLabel>Room</InputLabel>
                   <Select
                     label='Room'
@@ -227,23 +230,18 @@ const CreateServiceCallForm = () => {
                       </MenuItem>
                     ))}
                   </Select>
-                  {/* <FormHelperText>With label + helper text</FormHelperText> */}
                 </FormControl>
-
-                {/* <TextField label="Location details" type="text" fullWidth /> */}
-              </Stack>
-
-              <Divider sx={{ marginBottom: marginBetweenFormGroups }} />
-
-              <Stack
-                spacing={3}
-                direction={{ xs: 'column', md: 'row' }}
-                marginBottom={marginBetweenFormGroups}>
+              </Grid>
+              <Grid item xs={12}>
+                <Divider />
+              </Grid>
+              {/* Type */}
+              <Grid item xs={12}>
                 <FormControl fullWidth>
                   <InputLabel>Type</InputLabel>
                   <Select
                     label='Type'
-                    {...register('type', { required: 'type is required' })}
+                    {...register('type', { required: 'Type is required' })}
                     error={!!errors.type}
                     defaultValue=''>
                     {[
@@ -255,18 +253,16 @@ const CreateServiceCallForm = () => {
                       </MenuItem>
                     ))}
                   </Select>
-                  <FormHelperText>{errors.type?.message}</FormHelperText>
+                  <FormHelperText error>{errors.type?.message}</FormHelperText>
                 </FormControl>
-              </Stack>
-              <Stack
-                spacing={3}
-                direction={{ xs: 'column', md: 'row' }}
-                marginBottom={marginBetweenFormGroups}>
+              </Grid>
+              {/* Category and SubCategory */}
+              <Grid item xs={12} md={6}>
                 <FormControl fullWidth>
                   <InputLabel>Category</InputLabel>
                   <Select
                     label='Category'
-                    {...register('category', { required: 'category is required' })}
+                    {...register('category', { required: 'Category is required' })}
                     onChange={(e) => handleCategoryChange(e.target.value)}
                     error={!!errors.category}
                     defaultValue=''>
@@ -276,14 +272,15 @@ const CreateServiceCallForm = () => {
                       </MenuItem>
                     ))}
                   </Select>
-                  <FormHelperText>{errors.category?.message}</FormHelperText>
+                  <FormHelperText error>{errors.category?.message}</FormHelperText>
                 </FormControl>
-
+              </Grid>
+              <Grid item xs={12} md={6}>
                 <FormControl fullWidth>
                   <InputLabel>Sub Category</InputLabel>
                   <Select
                     label='Sub Category'
-                    {...register('subCategory', { required: 'sub category is required' })}
+                    {...register('subCategory', { required: 'Sub category is required' })}
                     disabled={!subCategories.length}
                     error={!!errors.subCategory}
                     defaultValue=''>
@@ -293,28 +290,34 @@ const CreateServiceCallForm = () => {
                       </MenuItem>
                     ))}
                   </Select>
-                  <FormHelperText>{errors.subCategory?.message}</FormHelperText>
+                  <FormHelperText error>{errors.subCategory?.message}</FormHelperText>
                 </FormControl>
-              </Stack>
-
-              <Divider sx={{ marginBottom: marginBetweenFormGroups }} />
-
-              <Stack marginBottom={4}>
+              </Grid>
+              <Grid item xs={12}>
+                <Divider />
+              </Grid>
+              {/* Service call details */}
+              <Grid item xs={12}>
                 <TextField
-                  placeholder='Service call details'
+                  fullWidth
+                  label='Service call details'
+                  placeholder='Describe the issue or request'
                   multiline
                   rows={detailsTextFieldRows}
                   {...register('details', { required })}
+                  error={!!errors.details}
+                  helperText={errors.details?.message}
                 />
-              </Stack>
-              <Stack spacing={3} direction={{ xs: 'column', md: 'row' }} marginBottom={2}>
+              </Grid>
+              {/* Priority */}
+              <Grid item xs={12} md={6}>
                 <FormControl fullWidth>
                   <InputLabel>Priority</InputLabel>
                   <Select
                     label='Priority'
                     {...register('priority', { required })}
                     error={!!errors.priority}
-                    defaultValue=''>
+                    defaultValue={1}>
                     {[
                       { name: 'Low', value: 1 },
                       { name: 'Medium', value: 2 },
@@ -326,23 +329,27 @@ const CreateServiceCallForm = () => {
                       </MenuItem>
                     ))}
                   </Select>
-                  <FormHelperText>{errors.priority?.message}</FormHelperText>
+                  <FormHelperText error>{errors.priority?.message}</FormHelperText>
                 </FormControl>
-              </Stack>
-              <Stack direction={'row-reverse'}>
-                <Button
-                  type='submit'
-                  variant='contained'
-                  size='large'
-                  sx={{ paddingInline: 5 }}
-                  disabled={!isValid}>
-                  Send
-                </Button>
-              </Stack>
-            </form>
-          </Paper>
-        </Grid>
-        <DevTool control={control}></DevTool>
+              </Grid>
+              {/* Submit button */}
+              <Grid item xs={12}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button
+                    type='submit'
+                    variant='contained'
+                    size='large'
+                    disabled={!isValid}
+                    sx={{ minWidth: 120 }}>
+                    Submit
+                  </Button>
+                </Box>
+              </Grid>
+            </Grid>
+          </form>
+        </Paper>
+      </Container>
+      <DevTool control={control}></DevTool>
     </>
   );
 };
