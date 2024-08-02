@@ -13,19 +13,29 @@ import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { formatJsonDateTime } from '../../../../utils/dateHelper';
-import { Tooltip, Dialog } from '@mui/material';
+import { Tooltip, Dialog, DialogTitle, DialogActions, Button, DialogContent } from '@mui/material';
 import { lightGreen, yellow } from '@mui/material/colors';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import CableIcon from '@mui/icons-material/Cable';
-import PractitionerAssociateComponent from './Associate'; // Ensure the path is correct
+import AssignToPractitioner from './AssignToPractitioner'; // Ensure the path is correct
+import { refreshPage } from '../../../../utils/browserHelper';
 
-const tableHeaders = ['Category', 'Created', 'Closed', 'Details', 'Location', 'Status', 'Technician', ''];
+const tableHeaders = [
+  'Category',
+  'Created',
+  'Closed',
+  'Details',
+  'Location',
+  'Status',
+  'Technician',
+  '',
+];
 
 function Row(props) {
   const { row } = props;
   const [open, setOpen] = useState(false);
-  const [openAssociateDialog, setOpenAssociateDialog] = useState(false);
+  const [openAssignDialog, setOpenAssignDialog] = useState(false);
   const green = lightGreen.A400;
   const myYellow = yellow[400];
   const deleteTitleString = 'Cannot be canceled - Already assigned to a technician';
@@ -45,7 +55,9 @@ function Row(props) {
   const locationString = `Building ${building}, Floor ${floor}, ${department}, Room ${room}`;
 
   const closedDateTime =
-    row.currentStatus.status.value === 4 /*Closed*/ ? formatJsonDateTime(row.currentStatus.dateTime) : null;
+    row.currentStatus.status.value === 4 /*Closed*/
+      ? formatJsonDateTime(row.currentStatus.dateTime)
+      : null;
 
   const handleRowClick = () => {
     console.log('Row clicked:', row);
@@ -64,24 +76,25 @@ function Row(props) {
     // Add logic to edit the service call here
   };
 
-  const handleAssociate = (event) => {
+  const handleAssign = (event) => {
     event.stopPropagation();
-    console.log('Associate service call:', serviceCallId);
-    setOpenAssociateDialog(true);
+    setOpenAssignDialog(true);
   };
 
   return (
     <Fragment>
-      <TableRow hover sx={{ '& > *': { borderBottom: 'unset' }, cursor: 'pointer' }} onClick={handleRowClick}>
+      <TableRow
+        hover
+        sx={{ '& > *': { borderBottom: 'unset' }, cursor: 'pointer' }}
+        onClick={handleRowClick}>
         <TableCell>
           <IconButton
-            aria-label="expand row"
-            size="small"
+            aria-label='expand row'
+            size='small'
             onClick={(event) => {
               event.stopPropagation();
               setOpen(!open);
-            }}
-          >
+            }}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
@@ -105,7 +118,7 @@ function Row(props) {
             </Tooltip>
           ) : (
             <Tooltip title={'Cancel Service Call'}>
-              <IconButton aria-label="Cancelation" sx={{ color: green }} onClick={handleDelete}>
+              <IconButton aria-label='Cancelation' sx={{ color: green }} onClick={handleDelete}>
                 <DeleteIcon />
               </IconButton>
             </Tooltip>
@@ -121,7 +134,7 @@ function Row(props) {
             </Tooltip>
           ) : (
             <Tooltip title={'Edit Service Call'}>
-              <IconButton aria-label="create" sx={{ color: myYellow }} onClick={handleEdit}>
+              <IconButton aria-label='create' sx={{ color: myYellow }} onClick={handleEdit}>
                 <CreateIcon />
               </IconButton>
             </Tooltip>
@@ -136,7 +149,7 @@ function Row(props) {
             </Tooltip>
           ) : (
             <Tooltip title={'Associate Service Call'}>
-              <IconButton aria-label="associate" sx={{ color: myYellow }} onClick={handleAssociate}>
+              <IconButton aria-label='associate' sx={{ color: myYellow }} onClick={handleAssign}>
                 <CableIcon />
               </IconButton>
             </Tooltip>
@@ -145,12 +158,12 @@ function Row(props) {
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
-          <Collapse in={open} timeout="auto" unmountOnExit>
+          <Collapse in={open} timeout='auto' unmountOnExit>
             <Box sx={{ margin: 1 }}>
-              <Typography variant="h6" gutterBottom component="div">
+              <Typography variant='h6' gutterBottom component='div'>
                 Status History
               </Typography>
-              <Table size="small" aria-label="purchases">
+              <Table size='small' aria-label='purchases'>
                 <TableHead>
                   <TableRow>
                     <TableCell>Status</TableCell>
@@ -160,7 +173,7 @@ function Row(props) {
                 <TableBody>
                   {row.statusUpdates.map((historyRow) => (
                     <TableRow key={historyRow.dateTime}>
-                      <TableCell component="th" scope="row">
+                      <TableCell component='th' scope='row'>
                         {historyRow.status.name}
                       </TableCell>
                       <TableCell>{formatJsonDateTime(historyRow.dateTime)}</TableCell>
@@ -172,12 +185,18 @@ function Row(props) {
           </Collapse>
         </TableCell>
       </TableRow>
-      <Dialog open={openAssociateDialog} onClose={() => setOpenAssociateDialog(false)}>
-        <PractitionerAssociateComponent 
-          subCategoryId={subCategoryId}
-          serviceCallId={serviceCallId} 
-          onClose={() => setOpenAssociateDialog(false)}
-        />
+      <Dialog open={openAssignDialog} onClose={() => setOpenAssignDialog(false)}>
+        <DialogTitle>Assign Practitioner</DialogTitle>
+        <DialogContent>
+          <AssignToPractitioner
+            subCategoryId={subCategoryId}
+            serviceCallId={serviceCallId}
+            onClose={() => refreshPage()}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenAssignDialog(false)}>Close</Button>
+        </DialogActions>
       </Dialog>
     </Fragment>
   );
