@@ -1,13 +1,10 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import ServiceCalls from './pages/user/ServiceCalls';
-import ServiceCallsManager from './pages/user/ServiceCallsManager';
-import { CreateServiceCallForm } from './features/user/serviceCalls';
 import PrivateRoutes from './PrivateRoutes';
 import { Navigate } from 'react-router-dom';
 import PageContainer from './layouts/PageContainer';
+import { CreateServiceCallForm, ServiceCalls, ServiceCallsManager } from './features/serviceCalls';
+import { Login, Register } from './features/authentication';
 
 function App() {
   return (

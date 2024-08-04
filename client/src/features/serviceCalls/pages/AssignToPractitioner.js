@@ -10,8 +10,8 @@ import {
   Avatar,
   Stack,
 } from '@mui/material';
-import useApiClient from '../../../../api/apiClient';
-import { useAlert } from '../../../../context/AlertContext';
+import useApiClient from '../../../api/apiClient';
+import { useAlert } from '../../../context/AlertContext';
 
 const AssignToPractitioner = ({ subCategoryId, serviceCallId, onClose }) => {
   const [practitioners, setPractitioners] = useState([]);

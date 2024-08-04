@@ -14,12 +14,12 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import useApiClient from '../../../../api/apiClient';
+import useApiClient from '../../../api/apiClient';
 import { useForm } from 'react-hook-form';
 import { DevTool } from '@hookform/devtools';
-import { useAuth } from '../../../authentication';
+import { useAuth } from '../../authentication';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAlert } from '../../../../context/AlertContext';
+import { useAlert } from '../../../context/AlertContext';
 
 const detailsTextFieldRows = 5;
 

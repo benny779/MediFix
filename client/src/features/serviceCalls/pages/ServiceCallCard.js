@@ -4,7 +4,7 @@ import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { formatJsonDateTime } from '../../../../utils/dateHelper';
+import { formatJsonDateTime } from '../../../utils/dateHelper';
 import { CardActionArea, Chip, IconButton, Tooltip } from '@mui/material';
 import CreateIcon from '@mui/icons-material/Create';
 import CableIcon from '@mui/icons-material/Cable';

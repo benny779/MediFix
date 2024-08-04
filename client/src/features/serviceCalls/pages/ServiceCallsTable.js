@@ -12,14 +12,14 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { formatJsonDateTime } from '../../../../utils/dateHelper';
+import { formatJsonDateTime } from '../../../utils/dateHelper';
 import { Tooltip, Dialog, DialogTitle, DialogActions, Button, DialogContent } from '@mui/material';
 import { lightGreen, yellow } from '@mui/material/colors';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import CableIcon from '@mui/icons-material/Cable';
 import AssignToPractitioner from './AssignToPractitioner'; // Ensure the path is correct
-import { refreshPage } from '../../../../utils/browserHelper';
+import { refreshPage } from '../../../utils/browserHelper';
 
 const tableHeaders = [
   'Category',

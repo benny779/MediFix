@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Button, Stack, TextField, Divider, InputAdornment, IconButton } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { isValidEmail, isValidPassword } from '../utils/validation';
-import AuthLayout from '../layouts/AuthLayout';
-import { useAlert } from '../context/AlertContext';
-import { useAuth } from '../features/authentication';
+import { isValidEmail, isValidPassword } from '../../../utils/validation';
+import AuthLayout from '../../../layouts/AuthLayout';
+import { useAlert } from '../../../context/AlertContext';
+import { useAuth } from '..';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const RegisterForm = () => {

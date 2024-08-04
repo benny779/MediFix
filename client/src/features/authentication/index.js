@@ -1,7 +1,9 @@
 import { AuthProvider } from '../../context/AuthContext';
 import { useAuth } from './services/useAuth';
+import Login from './pages/Login';
+import Register from './pages/Register';
 
-export { useAuth, AuthProvider };
+export { useAuth, AuthProvider, Login, Register };
 
 export const ENDPOINT = '/Account';
 export const LOCAL_STORAGE_NAME = 'user';

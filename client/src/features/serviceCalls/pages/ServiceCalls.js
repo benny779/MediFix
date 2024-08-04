@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { CardView, ServiceCallsTable } from '../../features/user/serviceCalls';
 import { Box, Fab, ToggleButton, ToggleButtonGroup, Typography, Link } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import fabStyle from '../../components/fabStyle';
+import fabStyle from '../../../components/fabStyle';
 import TableRowsIcon from '@mui/icons-material/TableRows';
 import AppsIcon from '@mui/icons-material/Apps';
-import useApiClient from '../../api';
-import { useAuth } from '../../features/authentication';
-import { useAlert } from '../../context/AlertContext';
+import useApiClient from '../../../api';
+import { useAuth } from '../../authentication';
+import { useAlert } from '../../../context/AlertContext';
 import { useLocation, useNavigate } from 'react-router-dom';
+import CardView from './CardView';
+import ServiceCallsTable from './ServiceCallsTable';
 
 const ENDPOINT = 'ServiceCalls/';
 
