@@ -150,7 +150,7 @@ const CreateServiceCallForm = () => {
 
     const { isSuccess, error } = await apiClient.post('ServiceCalls', serviceCall);
 
-    (isSuccess && navigate(from, { replace: true })) || displayAlert(error);
+    isSuccess ? navigate(from, { replace: true }) : displayAlert(error);
   };
 
   return (
