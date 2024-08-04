@@ -35,7 +35,8 @@ const AssignToPractitioner = ({ subCategoryId, serviceCallId, onClose }) => {
     const { isSuccess, error } = await apiClient.patch(
       `ServiceCalls/${serviceCallId}/assign/${practitionerId}`
     );
-    isSuccess ? onClose() : displayAlert(error);
+    !isSuccess && displayAlert(error);
+    onClose(isSuccess);
   };
 
   return (

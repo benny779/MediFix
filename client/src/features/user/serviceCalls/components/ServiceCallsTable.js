@@ -191,7 +191,7 @@ function Row(props) {
           <AssignToPractitioner
             subCategoryId={subCategoryId}
             serviceCallId={serviceCallId}
-            onClose={() => refreshPage()}
+            onClose={(refresh) => (refresh ? refreshPage() : setOpenAssignDialog(false))}
           />
         </DialogContent>
         <DialogActions>
