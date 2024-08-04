@@ -3,17 +3,12 @@ import useApiClient from '../../../api';
 import { useAuthContext } from '../../../context/AuthContext';
 import { ENDPOINT } from '..';
 
-const Roles = {
-  client: 'Client',
-  manager: 'Manager',
-  practitioner: 'Practitioner',
-};
-
 export function useAuth() {
   const apiClient = useApiClient();
   const { user, accessToken, refreshToken, setAuthInfo, clearAuthInfo, isLoading } = useAuthContext();
 
   const roles = useMemo(() => user?.roles?.split(',') || [], [user]);
+  const type = roles[0];
 
   const register = useCallback(
     async (registerObj) => {
@@ -60,7 +55,7 @@ export function useAuth() {
     register,
     logout,
     hasRole,
-    Roles,
+    type,
     isLoading,
   };
 }

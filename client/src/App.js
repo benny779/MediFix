@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import PrivateRoutes from './PrivateRoutes';
+import PrivateRoutes from './routes/PrivateRoutes';
 import { Navigate } from 'react-router-dom';
 import PageContainer from './layouts/PageContainer';
 import { CreateServiceCallForm, ServiceCalls, ServiceCallsManager } from './features/serviceCalls';

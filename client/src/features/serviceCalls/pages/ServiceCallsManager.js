@@ -5,7 +5,6 @@ import fabStyle from '../../../components/fabStyle';
 import TableRowsIcon from '@mui/icons-material/TableRows';
 import AppsIcon from '@mui/icons-material/Apps';
 import useApiClient from '../../../api';
-import { useAuth } from '../../authentication';
 import { useAlert } from '../../../context/AlertContext';
 import CardView from './CardView';
 import ServiceCallsTable from './ServiceCallsTable';
@@ -15,7 +14,6 @@ const ENDPOINT = 'serviceCalls/';
 const ManagerServiceCalls = () => {
   const [displayMode, setDisplayMode] = useState('table');
   const { get, isLoading, isSuccess, error, response } = useApiClient();
-  const { user } = useAuth();
   const { displayAlert } = useAlert();
 
   useEffect(() => {
