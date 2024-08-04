@@ -11,17 +11,16 @@ import {
 
 const AuthContext = createContext({});
 
+const getAccessToken = () => localStorage.getItem(LOCAL_STORAGE_NAME_ACCESS_TOKEN);
+const getRefreshToken = () => localStorage.getItem(LOCAL_STORAGE_NAME_REFRESH_TOKEN);
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const storedUser = localStorage.getItem(LOCAL_STORAGE_NAME);
     return storedUser ? JSON.parse(storedUser) : null;
   });
-  const [accessToken, setAccessToken] = useState(() =>
-    localStorage.getItem(LOCAL_STORAGE_NAME_ACCESS_TOKEN)
-  );
-  const [refreshToken, setRefreshToken] = useState(() =>
-    localStorage.getItem(LOCAL_STORAGE_NAME_REFRESH_TOKEN)
-  );
+  const [accessToken, setAccessToken] = useState(getAccessToken);
+  const [refreshToken, setRefreshToken] = useState(getRefreshToken);
   const [isLoading, setIsLoading] = useState(true);
 
   const isTokenActive = accessToken && user;
@@ -86,8 +85,8 @@ export const AuthProvider = ({ children }) => {
 
   useLayoutEffect(() => {
     setupAxiosInterceptors(
-      () => accessToken,
-      () => refreshToken,
+      getAccessToken,
+      getRefreshToken,
       setAuthInfo,
       clearAuthInfo
     );
