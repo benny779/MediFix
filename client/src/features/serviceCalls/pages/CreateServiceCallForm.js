@@ -120,9 +120,9 @@ const CreateServiceCallForm = () => {
   };
 
   const fetchSubCategories = async (categoryId) => {
-    const { isSuccess, response, error } = await apiClient.get(`SubCategories/${categoryId}`);
+    const { isSuccess, response, error } = await apiClient.get(`SubCategories?categoryId=${categoryId}`);
     if (isSuccess) {
-      setSubCategories(response.categories);
+      setSubCategories(response.subCategories);
     } else {
       displayAlert(error);
     }
