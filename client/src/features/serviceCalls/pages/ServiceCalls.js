@@ -20,8 +20,6 @@ const ServiceCalls = () => {
   const { displayAlert } = useAlert();
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathName || 'new/';
 
   useEffect(() => {
     const fetch = async () => await get(ENDPOINT, { clientId: user.sub });
@@ -32,7 +30,7 @@ const ServiceCalls = () => {
   const handleDisplayMode = (e, value) => setDisplayMode(value);
 
   const handleNewServiceCall = () => {
-    navigate(from, { replace: true });
+    navigate('new', { replace: true });
     console.log('Starting a new service call');
   };
 
