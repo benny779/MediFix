@@ -16,7 +16,7 @@ import { useAuth } from '../../authentication';
 import { useAlert } from '../../../context/AlertContext';
 import { truncateText } from '../../../utils/stringHelper';
 import { getTimeDifference } from '../../../utils/dateHelper';
-import { currentPath } from '../../../utils/browserHelper';
+import { handleCallClick } from '../../../utils/browserHelper';
 
 const ENDPOINT = 'ServiceCalls/';
 
@@ -41,13 +41,8 @@ const PractitionerServiceCalls = () => {
   const { isLoading, isSuccess, error, response, get } = useApiClient();
   const { displayAlert } = useAlert();
 
-  const handleItemClick = (itemId) => {
-    navigate(`${currentPath}/${itemId}`);
-  };
-
-  const handleCallClick = (e, phone) => {
-    e.stopPropagation();
-    window.location.href = `tel:${phone}`;
+  const handleItemClick = (item) => {
+    navigate(item.id);
   };
 
   useEffect(() => {
@@ -87,7 +82,7 @@ const PractitionerServiceCalls = () => {
           return (
             <Card
               key={item.id}
-              onClick={() => handleItemClick(item.id)}
+              onClick={() => handleItemClick(item)}
               sx={{
                 mb: 1,
                 border: '1px solid #e0e0e0',

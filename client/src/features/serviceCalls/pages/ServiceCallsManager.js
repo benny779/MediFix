@@ -19,6 +19,7 @@ const ManagerServiceCalls = () => {
   useEffect(() => {
     const fetch = async () => await get(ENDPOINT);
     fetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDisplayMode = (e, value) => setDisplayMode(value);
