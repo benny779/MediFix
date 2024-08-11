@@ -25,7 +25,7 @@ const practitionerRoutes = [
       id: 1,
       text: 'Service Calls',
       icon: <InboxIcon />,
-      path: '/serviceCalls',
+      path: '/practitioner/serviceCalls',
     },
   ],
 ];
