@@ -2,10 +2,12 @@ import { useCallback, useMemo } from 'react';
 import useApiClient from '../../../api';
 import { useAuthContext } from '../../../context/AuthContext';
 import { ENDPOINT } from '..';
+import { refreshPage } from '../../../utils/browserHelper';
 
 export function useAuth() {
   const apiClient = useApiClient();
-  const { user, accessToken, refreshToken, setAuthInfo, clearAuthInfo, isLoading } = useAuthContext();
+  const { user, accessToken, refreshToken, setAuthInfo, clearAuthInfo, isLoading } =
+    useAuthContext();
 
   const roles = useMemo(() => user?.roles?.split(',') || [], [user]);
   const type = roles[0];
@@ -35,9 +37,15 @@ export function useAuth() {
     [apiClient, setAuthInfo]
   );
 
-  const logout = useCallback(() => {
-    clearAuthInfo();
-  }, [clearAuthInfo]);
+  const logout = useCallback(
+    (refresh = false) => {
+      clearAuthInfo();
+      if (refresh) {
+        refreshPage();
+      }
+    },
+    [clearAuthInfo]
+  );
 
   const hasRole = useCallback(
     (role) => {
