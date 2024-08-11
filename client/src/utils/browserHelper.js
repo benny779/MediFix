@@ -1,3 +1,10 @@
-export const refreshPage = () => window.location.reload();
+const refreshPage = () => window.location.reload();
 
-export const currentPath = window.location.pathname;
+const currentPath = window.location.pathname;
+
+const handleCallClick = (e, phone) => {
+  e.stopPropagation();
+  window.location.href = `tel:${phone}`;
+};
+
+export { refreshPage, currentPath, handleCallClick };
