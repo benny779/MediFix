@@ -24,7 +24,7 @@ const AssignToPractitioner = ({ subCategoryId, serviceCallId, onClose }) => {
         `Practitioners?subCategoryId=${subCategoryId}`
       );
 
-      isSuccess ? setPractitioners(response.practitioners) : displayAlert(error);
+      isSuccess ? setPractitioners(response.items) : displayAlert(error);
     };
 
     fetchPractitioners();

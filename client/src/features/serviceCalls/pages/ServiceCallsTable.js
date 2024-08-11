@@ -216,7 +216,7 @@ function ServiceCallsTable({ serviceCalls }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {serviceCalls.serviceCalls.map((row) => (
+            {serviceCalls.map((row) => (
               <Row key={row.id} row={row} />
             ))}
           </TableBody>

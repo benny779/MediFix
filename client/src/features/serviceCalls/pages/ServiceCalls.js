@@ -67,7 +67,7 @@ const ServiceCalls = () => {
           </Typography>
         </Box>
       ) : displayMode === 'table' ? (
-        <ServiceCallsTable serviceCalls={response} />
+        <ServiceCallsTable serviceCalls={response.items} />
       ) : (
         <CardView serviceCalls={response} />
       )}

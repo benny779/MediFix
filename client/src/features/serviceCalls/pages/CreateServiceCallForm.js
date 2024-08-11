@@ -73,7 +73,7 @@ const CreateServiceCallForm = () => {
     const { isSuccess, response, error } = await apiClient.get('Locations/types/1');
 
     if (isSuccess) {
-      setBuildings(response.locations);
+      setBuildings(response.items);
     } else {
       displayAlert(error);
     }
@@ -83,7 +83,7 @@ const CreateServiceCallForm = () => {
     const { isSuccess, response, error } = await apiClient.get(`Locations/${buildingId}/children`);
 
     if (isSuccess) {
-      setFloors(response.values);
+      setFloors(response.items);
     } else {
       displayAlert(error);
     }
@@ -93,7 +93,7 @@ const CreateServiceCallForm = () => {
     const { isSuccess, response, error } = await apiClient.get(`Locations/${floorId}/children`);
 
     if (isSuccess) {
-      setDepartments(response.values);
+      setDepartments(response.items);
     } else {
       displayAlert(error);
     }
@@ -103,7 +103,7 @@ const CreateServiceCallForm = () => {
     const { isSuccess, response, error } = await apiClient.get(`Locations/${depId}/children`);
 
     if (isSuccess) {
-      setRooms(response.values);
+      setRooms(response.items);
     } else {
       displayAlert(error);
     }
@@ -113,7 +113,7 @@ const CreateServiceCallForm = () => {
     const { isSuccess, response, error } = await apiClient.get(`Categories`);
 
     if (isSuccess) {
-      setCategories(response.categories);
+      setCategories(response.items);
     } else {
       displayAlert(error);
     }
@@ -122,7 +122,7 @@ const CreateServiceCallForm = () => {
   const fetchSubCategories = async (categoryId) => {
     const { isSuccess, response, error } = await apiClient.get(`SubCategories?categoryId=${categoryId}`);
     if (isSuccess) {
-      setSubCategories(response.subCategories);
+      setSubCategories(response.items);
     } else {
       displayAlert(error);
     }
