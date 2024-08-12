@@ -1,38 +1,76 @@
-import { Button, Grid, Stack, Typography } from '@mui/material';
+import { Button, Grid, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
 import React from 'react';
 import { banner } from '../features/authentication';
 import Image from 'mui-image';
 
 const AuthLayout = ({ children, header, bottomButton }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
   return (
-    <Grid container justifyContent='center' alignItems='center' style={{ minHeight: '96vh' }}>
-      <Grid container maxWidth='md' my={4} sx={{ p: 2 }}>
+    <Grid
+      container
+      justifyContent='center'
+      alignItems='center'
+      sx={{
+        minHeight: '96vh',
+        backgroundColor: theme.palette.background.default,
+      }}>
+      <Grid
+        container
+        maxWidth='md'
+        sx={{
+          p: { xs: 2, sm: 4 },
+          boxShadow: { sm: '0 4px 6px rgba(0, 0, 0, 0.1)' },
+          borderRadius: { sm: 2 },
+          backgroundColor: 'background.paper',
+        }}>
         <Grid
           container
           item
           xs={12}
           sm={7}
           md={6}
-          sx={{ p: 2, border: 1, borderColor: 'primary.main' }}
           direction='column'
           alignItems='center'
-          justifyContent='center'>
-          <Typography marginY={2} variant='h4' textAlign='center'>
+          justifyContent='center'
+          sx={{ p: { xs: 2, sm: 4 } }}>
+          <Typography
+            variant='h4'
+            component='h1'
+            textAlign='center'
+            gutterBottom
+            sx={{
+              fontWeight: 'bold',
+              color: 'primary.main',
+              mb: 4,
+            }}>
             {header}
           </Typography>
           {children}
-          <Stack>
-            <Button
-              href={bottomButton?.target || '#'}
-              style={{ Text }}
-              sx={{ paddingX: 3, marginTop: 1 }}>
-              {bottomButton?.text || 'Buttom Button'}
-            </Button>
-          </Stack>
+          {bottomButton && (
+            <Stack sx={{ width: '100%', mt: 1 }}>
+              <Button href={bottomButton.target || '#'} sx={{ px: 3 }}>
+                {bottomButton.text}
+              </Button>
+            </Stack>
+          )}
         </Grid>
-        <Grid item sm={5} md={6}>
-          <Image src={banner} alt='' fit='cover' duration={0} />
-        </Grid>
+
+        {!isMobile && (
+          <Grid item sm={5} md={6}>
+            <Image
+              src={banner}
+              alt='Authentication banner'
+              fit='cover'
+              duration={0}
+              sx={{
+                height: '100%',
+                borderRadius: { sm: '0 8px 8px 0' },
+              }}
+            />
+          </Grid>
+        )}
       </Grid>
     </Grid>
   );
