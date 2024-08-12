@@ -17,6 +17,7 @@ import { useAlert } from '../../../context/AlertContext';
 import { truncateText } from '../../../utils/stringHelper';
 import { getTimeDifference } from '../../../utils/dateHelper';
 import { handleCallClick } from '../../../utils/browserHelper';
+import { ServiceCallStatus } from '../../../constant';
 
 const ENDPOINT = 'ServiceCalls/';
 
@@ -79,6 +80,8 @@ const PractitionerServiceCalls = () => {
           const currentStatus = item.currentStatus.status.value;
           const type = item.type.name;
 
+          const isFinished = currentStatus === ServiceCallStatus.finished;
+
           return (
             <Card
               key={item.id}
@@ -87,6 +90,7 @@ const PractitionerServiceCalls = () => {
                 mb: 1,
                 border: '1px solid #e0e0e0',
                 borderRadius: 2,
+                backgroundColor: isFinished ? '#deffe7' : 'inherit',
               }}>
               <CardContent sx={{ padding: 2 }}>
                 <Box
@@ -101,7 +105,9 @@ const PractitionerServiceCalls = () => {
                     {title}
                   </Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    {currentStatus === 3 && <PlayArrowIcon color='success' sx={{ mr: 0.5 }} />}
+                    {currentStatus === ServiceCallStatus.started && (
+                      <PlayArrowIcon color='success' sx={{ mr: 0.5 }} />
+                    )}
                     {getPriorityIcon(item.priority.value)}
 
                     <Divider orientation='vertical' sx={{ mx: 0.5 }} flexItem />
@@ -150,7 +156,7 @@ const PractitionerServiceCalls = () => {
                       <AccessTimeIcon fontSize='small' sx={{ mr: 0.5 }} />
                       Created: {getTimeDifference(item.dateCreated)}
                     </Typography>
-                    {currentStatus === 3 && (
+                    {currentStatus === ServiceCallStatus.started && (
                       <Typography variant='body2' sx={{ display: 'flex', alignItems: 'center' }}>
                         <AccessTimeIcon fontSize='small' sx={{ mr: 0.5 }} />
                         Open: {getTimeDifference(item.currentStatus.dateTime)}

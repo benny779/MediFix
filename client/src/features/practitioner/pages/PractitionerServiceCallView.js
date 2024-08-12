@@ -14,6 +14,10 @@ import {
   DialogActions,
   CircularProgress,
   Divider,
+  Chip,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import PersonIcon from '@mui/icons-material/Person';
@@ -21,19 +25,34 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import BuildIcon from '@mui/icons-material/Build';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { handleCallClick } from '../../../utils/browserHelper';
-import { formatJsonDateTime } from '../../../utils/dateHelper';
+import { formatJsonDateTime, getTimeDifference } from '../../../utils/dateHelper';
 import useApiClient from '../../../api';
+import { ServiceCallStatus } from '../../../constant';
+
+const getStatusChip = (status) => {
+  const statusColors = {
+    [ServiceCallStatus.started]: 'primary',
+    [ServiceCallStatus.finished]: 'success',
+    default: 'default',
+  };
+  return (
+    <Chip
+      label={status.name}
+      color={statusColors[status.value] || statusColors.default}
+      sx={{ mb: 1 }}
+    />
+  );
+};
 
 const PractitionerServiceCallView = () => {
   const { id } = useParams();
-  const { get, patch, post, error, isLoading, isSuccess } = useApiClient();
+  const { get, patch, isLoading, isSuccess } = useApiClient();
   const [item, setItem] = useState(null);
 
   const navigate = useNavigate();
@@ -46,7 +65,7 @@ const PractitionerServiceCallView = () => {
 
   const [closeDetails, setCloseDetails] = useState('');
   const [isQRDialogOpen, setIsQRDialogOpen] = useState(false);
-  const [qrContent, setQrContent] = useState('');
+  // const [qrContent, setQrContent] = useState('');
 
   const handleCloseClick = () => {
     setIsQRDialogOpen(true);
@@ -82,7 +101,7 @@ const PractitionerServiceCallView = () => {
 
   const handleServiceCallClose = async () => {
     console.log(closeDetails);
-    const { isSuccess } = await post(`serviceCalls/${id}/close`, {
+    const { isSuccess } = await patch(`serviceCalls/${id}/close`, {
       serviceCallId: id,
       closeDetails,
     });
@@ -103,10 +122,10 @@ const PractitionerServiceCallView = () => {
   }, []);
 
   if (isLoading) return <CircularProgress />;
-  if (!isSuccess) return;
+  if (!isSuccess) return <Typography color='error'>Failed to load service call</Typography>;
 
-  const isStarted = item?.currentStatus?.status?.value === 3;
-  const isFinished = item?.currentStatus?.status?.value === 4;
+  const isStarted = item.currentStatus.status.value === ServiceCallStatus.started;
+  const isFinished = item.currentStatus.status.value === ServiceCallStatus.finished;
 
   return (
     <Box>
@@ -114,106 +133,99 @@ const PractitionerServiceCallView = () => {
         <ArrowBackIcon />
       </IconButton>
 
-      <Card>
+      <Card elevation={3}>
         <CardContent>
           <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              mb: 2,
-            }}>
-            <Typography variant='h6'>{item.subCategory.name}</Typography>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              {isStarted && <PlayArrowIcon color='success' sx={{ mr: 0.5 }} />}
-              {item.type.name === 'Repair' ? (
-                <BuildIcon fontSize='small' color='secondary' />
-              ) : (
-                <AddCircleOutlineIcon fontSize='small' color='primary' />
-              )}
-            </Box>
+            sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+            <Typography variant='h5' component='h1' fontWeight='bold'>
+              {item.subCategory.name}
+            </Typography>
+            {getStatusChip(item.currentStatus.status)}
           </Box>
 
-          <Typography variant='body1' sx={{ mb: 2 }}>
+          <Typography variant='body1' sx={{ mb: 3 }}>
             {item.details}
           </Typography>
 
-          <Box sx={{ mb: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Typography
-                variant='body2'
-                sx={{ display: 'flex', alignItems: 'center', mb: 1, fontSize: 'large' }}>
-                <PersonIcon fontSize='large' sx={{ mr: 0.5 }} />
-                {item.client.fullName}
-              </Typography>
-              {item.client.phoneNumber && (
-                <IconButton
-                  size='large'
-                  color='primary'
-                  onClick={(e) => handleCallClick(e, item.client.phoneNumber)}
-                  aria-label='Call client'>
-                  <PhoneIcon fontSize='large' />
-                </IconButton>
-              )}
-            </Box>
+          <Divider sx={{ my: 3 }} />
 
-            <Divider sx={{ mb: 1 }} />
-
-            <Typography
-              variant='body2'
-              sx={{ display: 'flex', alignItems: 'center', mb: 1, fontSize: 'large' }}>
-              <ApartmentIcon fontSize='large' sx={{ mr: 0.5 }} />
-              {item.location.building.name}
+          <Typography variant='h6' component='h2' sx={{ mb: 2 }}>
+            Client Information
+          </Typography>
+          <Box
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+            <Typography variant='body1' sx={{ display: 'flex', alignItems: 'center' }}>
+              <PersonIcon sx={{ mr: 1 }} />
+              {item.client.fullName}
             </Typography>
-            <Typography
-              variant='body2'
-              sx={{ display: 'flex', alignItems: 'center', mb: 1, fontSize: 'large' }}>
-              <FormatListNumberedIcon fontSize='large' sx={{ mr: 0.5 }} />
-              {item.location.floor.name}
-            </Typography>
-            <Typography
-              variant='body2'
-              sx={{ display: 'flex', alignItems: 'center', mb: 1, fontSize: 'large' }}>
-              <LocationOnIcon fontSize='large' sx={{ mr: 0.5 }} />
-              {item.location.department.name}
-            </Typography>
-            <Typography
-              variant='body2'
-              sx={{ display: 'flex', alignItems: 'center', mb: 1, fontSize: 'large' }}>
-              <MeetingRoomIcon fontSize='large' sx={{ mr: 0.5 }} />
-              {item.location.room.name}
-            </Typography>
-
-            <Divider sx={{ mb: 1 }} />
-
-            <Typography
-              variant='body2'
-              sx={{ display: 'flex', alignItems: 'center', mb: 1, fontSize: 'large' }}>
-              <AccessTimeIcon fontSize='large' sx={{ mr: 0.5 }} />
-              Created: {formatJsonDateTime(item.dateCreated)}
-            </Typography>
-            {isStarted && (
-              <Typography
-                variant='body2'
-                sx={{ display: 'flex', alignItems: 'center', fontSize: 'large' }}>
-                <AccessTimeIcon fontSize='large' sx={{ mr: 0.5 }} />
-                Started: {formatJsonDateTime(item.currentStatus.dateTime)}
-              </Typography>
+            {item.client.phoneNumber && (
+              <IconButton
+                color='primary'
+                onClick={(e) => handleCallClick(e, item.client.phoneNumber)}
+                aria-label='Call client'>
+                <PhoneIcon />
+              </IconButton>
             )}
           </Box>
 
+          <Divider sx={{ my: 3 }} />
+
+          <Typography variant='h6' component='h2' sx={{ mb: 2 }}>
+            Location Details
+          </Typography>
+          <Typography variant='body1' sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+            <ApartmentIcon sx={{ mr: 1 }} />
+            {item.location.building.name}
+          </Typography>
+          <Typography variant='body1' sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+            <FormatListNumberedIcon sx={{ mr: 1 }} />
+            {item.location.floor.name}
+          </Typography>
+          <Typography variant='body1' sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+            <LocationOnIcon sx={{ mr: 1 }} />
+            {item.location.department.name}
+          </Typography>
+          <Typography variant='body1' sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+            <MeetingRoomIcon sx={{ mr: 1 }} />
+            {item.location.room.name}
+          </Typography>
+
+          <Divider sx={{ my: 3 }} />
+
+          <Typography variant='h6' component='h2' sx={{ mb: 2 }}>
+            Timestamps
+          </Typography>
+          <Typography variant='body1' sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+            <AccessTimeIcon sx={{ mr: 1 }} />
+            Created: {formatJsonDateTime(item.dateCreated)} ({getTimeDifference(item.dateCreated)})
+          </Typography>
+          {isStarted && (
+            <Typography variant='body1' sx={{ display: 'flex', alignItems: 'center' }}>
+              <AccessTimeIcon sx={{ mr: 1 }} />
+              Started: {formatJsonDateTime(item.currentStatus.dateTime)} (
+              {getTimeDifference(item.currentStatus.dateTime)})
+            </Typography>
+          )}
+
           {(isStarted || isFinished) && (
-            <TextField
-              fullWidth
-              multiline
-              rows={4}
-              variant='outlined'
-              label='Close Details'
-              value={item.closeDetails || closeDetails}
-              onChange={(e) => setCloseDetails(e.target.value)}
-              disabled={isFinished}
-              sx={{ mb: 2 }}
-            />
+            <Accordion sx={{ mt: 3 }}>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography>Close Details</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={4}
+                  variant='outlined'
+                  value={item.closeDetails}
+                  onChange={(e) => setCloseDetails(e.target.value)}
+                  disabled={isFinished}
+                  inputProps={{ maxLength: 500 }}
+                  helperText={!isFinished ? `${closeDetails?.length || 0}/500` : ''}
+                />
+              </AccordionDetails>
+            </Accordion>
           )}
 
           {!isFinished && (
@@ -221,8 +233,12 @@ const PractitionerServiceCallView = () => {
               variant='contained'
               color='primary'
               fullWidth
-              onClick={isStarted ? handleCloseClick : handleStartClick}>
-              {isStarted ? 'Close' : 'Start'}
+              size='large'
+              startIcon={isStarted ? <QrCodeScannerIcon /> : <PlayArrowIcon />}
+              onClick={isStarted ? handleCloseClick : handleStartClick}
+              disabled={isStarted && closeDetails?.length === 0}
+              sx={{ mt: 3 }}>
+              {isStarted ? 'Close Service Call' : 'Start Service Call'}
             </Button>
           )}
         </CardContent>
@@ -238,7 +254,11 @@ const PractitionerServiceCallView = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setIsQRDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleQRScan} variant='contained' color='primary'>
+          <Button
+            onClick={handleQRScan}
+            variant='contained'
+            color='primary'
+            startIcon={<QrCodeScannerIcon />}>
             Scan QR Code
           </Button>
         </DialogActions>
