@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import {
   Box,
@@ -34,6 +34,7 @@ import { handleCallClick } from '../../../utils/browserHelper';
 import { formatJsonDateTime, getTimeDifference } from '../../../utils/dateHelper';
 import useApiClient from '../../../api';
 import { ServiceCallStatus } from '../../../constant';
+import QrScanner from 'qr-scanner';
 
 const getStatusChip = (status) => {
   const statusColors = {
@@ -50,6 +51,8 @@ const getStatusChip = (status) => {
   );
 };
 
+const qrEnabled = false;
+
 const PractitionerServiceCallView = () => {
   const { id } = useParams();
   const { get, patch, isLoading, isSuccess } = useApiClient();
@@ -63,13 +66,9 @@ const PractitionerServiceCallView = () => {
     navigate(from);
   };
 
-  const [closeDetails, setCloseDetails] = useState('');
   const [isQRDialogOpen, setIsQRDialogOpen] = useState(false);
-  // const [qrContent, setQrContent] = useState('');
-
-  const handleCloseClick = () => {
-    setIsQRDialogOpen(true);
-  };
+  const videoRef = useRef(null);
+  const [qrScanner, setQrScanner] = useState(null);
 
   const handleStartClick = async () => {
     const { isSuccess } = await patch(`serviceCalls/${id}/start`, {});
@@ -79,10 +78,33 @@ const PractitionerServiceCallView = () => {
     }
   };
 
-  const handleQRScan = async () => {
-    // Simulating QR scan
-    // const scannedContent = 'Simulated QR Content';
-    // setQrContent(scannedContent);
+  const handleQRDialogOpen = () => {
+    setIsQRDialogOpen(true);
+    setTimeout(() => {
+      if (videoRef.current) {
+        const qrScanner = new QrScanner(videoRef.current, handleQRScan, {
+          returnDetailedScanResult: true,
+        });
+        setQrScanner(qrScanner);
+        qrScanner.start();
+      }
+    }, 0);
+  };
+
+  const handleQRDialogClose = () => {
+    if (qrScanner) {
+      qrScanner.stop();
+      qrScanner.destroy();
+      setQrScanner(null);
+    }
+    setIsQRDialogOpen(false);
+  };
+
+  const handleQRScan = async (result) => {
+    if (!result) return;
+
+    console.log(result.data);
+    handleQRDialogClose();
 
     // try {
     //   const result = await post('verify-qr', { qrContent: scannedContent });
@@ -100,14 +122,14 @@ const PractitionerServiceCallView = () => {
   };
 
   const handleServiceCallClose = async () => {
-    console.log(closeDetails);
-    const { isSuccess } = await patch(`serviceCalls/${id}/close`, {
-      serviceCallId: id,
-      closeDetails,
-    });
-    if (isSuccess) {
-      onBack();
-    }
+    console.log('handleServiceCallClose');
+    // const { isSuccess } = await patch(`serviceCalls/${id}/close`, {
+    //   serviceCallId: id,
+    //   item.closeDetails,
+    // });
+    // if (isSuccess) {
+    //   onBack();
+    // }
   };
 
   const fetchServiceCall = async () => {
@@ -120,6 +142,15 @@ const PractitionerServiceCallView = () => {
     fetchServiceCall();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    return () => {
+      if (qrScanner) {
+        qrScanner.stop();
+        qrScanner.destroy();
+      }
+    };
+  }, [qrScanner]);
 
   if (isLoading) return <CircularProgress />;
   if (!isSuccess) return <Typography color='error'>Failed to load service call</Typography>;
@@ -219,10 +250,10 @@ const PractitionerServiceCallView = () => {
                   rows={4}
                   variant='outlined'
                   value={item.closeDetails}
-                  onChange={(e) => setCloseDetails(e.target.value)}
+                  onChange={(e) => setItem((prev) => ({ ...prev, closeDetails: e.target.value }))}
                   disabled={isFinished}
                   inputProps={{ maxLength: 500 }}
-                  helperText={!isFinished ? `${closeDetails?.length || 0}/500` : ''}
+                  helperText={!isFinished ? `${item.closeDetails?.length || 0}/500` : ''}
                 />
               </AccordionDetails>
             </Accordion>
@@ -235,8 +266,14 @@ const PractitionerServiceCallView = () => {
               fullWidth
               size='large'
               startIcon={isStarted ? <QrCodeScannerIcon /> : <PlayArrowIcon />}
-              onClick={isStarted ? handleCloseClick : handleStartClick}
-              disabled={isStarted && closeDetails?.length === 0}
+              onClick={
+                isStarted
+                  ? qrEnabled
+                    ? handleQRDialogOpen
+                    : handleServiceCallClose
+                  : handleStartClick
+              }
+              disabled={isStarted && (item.closeDetails?.length || 0) === 0}
               sx={{ mt: 3 }}>
               {isStarted ? 'Close Service Call' : 'Start Service Call'}
             </Button>
@@ -244,23 +281,16 @@ const PractitionerServiceCallView = () => {
         </CardContent>
       </Card>
 
-      <Dialog open={isQRDialogOpen} onClose={() => setIsQRDialogOpen(false)}>
+      <Dialog open={isQRDialogOpen} onClose={handleQRDialogClose} maxWidth='sm' fullWidth>
         <DialogTitle>Scan QR Code</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-            <QrCodeScannerIcon sx={{ fontSize: 100 }} />
+            <video ref={videoRef} style={{ width: '100%', maxWidth: '400px' }} />
           </Box>
           <Typography>Please scan the QR code to proceed with closing the service call.</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setIsQRDialogOpen(false)}>Cancel</Button>
-          <Button
-            onClick={handleQRScan}
-            variant='contained'
-            color='primary'
-            startIcon={<QrCodeScannerIcon />}>
-            Scan QR Code
-          </Button>
+          <Button onClick={handleQRDialogClose}>Cancel</Button>
         </DialogActions>
       </Dialog>
     </Box>
