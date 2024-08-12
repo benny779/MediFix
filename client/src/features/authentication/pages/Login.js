@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import AuthLayout from '../../../layouts/AuthLayout';
 import { Button, Grid, Stack, Divider, Link } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAlert } from '../../../context/AlertContext';
 import { useAuth } from '..';
 import { EmailInput, PasswordInput } from '../../../components/ui';

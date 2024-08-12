@@ -7,7 +7,7 @@ import AppsIcon from '@mui/icons-material/Apps';
 import useApiClient from '../../../api';
 import { useAuth } from '../../authentication';
 import { useAlert } from '../../../context/AlertContext';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import CardView from './CardView';
 import ServiceCallsTable from './ServiceCallsTable';
 
@@ -24,7 +24,7 @@ const ServiceCalls = () => {
   useEffect(() => {
     const fetch = async () => await get(ENDPOINT, { clientId: user.sub });
     fetch();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDisplayMode = (e, value) => setDisplayMode(value);
@@ -41,11 +41,15 @@ const ServiceCalls = () => {
   return (
     <>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 2 }}>
-        <ToggleButtonGroup value={displayMode} exclusive onChange={handleDisplayMode} aria-label="text alignment">
-          <ToggleButton value="table" aria-label="left aligned">
+        <ToggleButtonGroup
+          value={displayMode}
+          exclusive
+          onChange={handleDisplayMode}
+          aria-label='text alignment'>
+          <ToggleButton value='table' aria-label='left aligned'>
             <TableRowsIcon />
           </ToggleButton>
-          <ToggleButton value="grid" aria-label="centered">
+          <ToggleButton value='grid' aria-label='centered'>
             <AppsIcon />
           </ToggleButton>
         </ToggleButtonGroup>
@@ -55,11 +59,11 @@ const ServiceCalls = () => {
         <h1>Loading...</h1>
       ) : !isSuccess ? (
         <Box sx={{ textAlign: 'center', mt: 4 }}>
-          <Typography variant="h5" gutterBottom>
+          <Typography variant='h5' gutterBottom>
             This user has no service calls
           </Typography>
-          <Typography variant="body1">
-            <Link href="#" onClick={handleNewServiceCall} underline="hover">
+          <Typography variant='body1'>
+            <Link href='#' onClick={handleNewServiceCall} underline='hover'>
               To move to opening a new service call, click here
             </Link>
           </Typography>
@@ -71,7 +75,7 @@ const ServiceCalls = () => {
       )}
 
       {/* <CreateServiceCallForm/> */}
-      <Fab color="primary" style={fabStyle} onClick={handleNewServiceCall}>
+      <Fab color='primary' style={fabStyle} onClick={handleNewServiceCall}>
         <AddIcon />
       </Fab>
     </>
