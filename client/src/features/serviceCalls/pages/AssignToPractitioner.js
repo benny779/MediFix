@@ -44,7 +44,7 @@ const AssignToPractitioner = ({ subCategoryId, serviceCallId, onClose }) => {
       {practitioners.map((practitioner) => (
         <ListItem key={practitioner.id}>
           <ListItemButton onClick={() => handleAssign(practitioner.practitionerId)}>
-            <Stack flexDirection={'row'} alignItems={'center'}>
+            <Stack flexDirection={'row'} alignItems={'center'} flex={1} mr={6}>
               <ListItemAvatar>
                 <Avatar>{`${practitioner.firstName[0]}${practitioner.lastName[0]}`}</Avatar>
               </ListItemAvatar>
