@@ -19,7 +19,7 @@ const ManagerServiceCalls = () => {
   useEffect(() => {
     const fetch = async () => await get(ENDPOINT);
     fetch();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDisplayMode = (e, value) => setDisplayMode(value);
@@ -48,9 +48,9 @@ const ManagerServiceCalls = () => {
       {isLoading ? (
         <h1>Loading...</h1>
       ) : !isSuccess ? null : displayMode === 'table' ? (
-        <ServiceCallsTable serviceCalls={response} />
+        <ServiceCallsTable serviceCalls={response.items} />
       ) : (
-        <CardView serviceCalls={response} />
+        <CardView serviceCalls={response.items} />
       )}
 
       {/* <CreateServiceCallForm/> */}

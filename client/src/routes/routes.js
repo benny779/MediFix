@@ -44,7 +44,7 @@ const managerRoutes = [
       id: 2,
       text: 'Service Calls',
       icon: <InboxIcon />,
-      path: '/serviceCalls',
+      path: '/manager/serviceCalls',
     },
     {
       id: 3,
