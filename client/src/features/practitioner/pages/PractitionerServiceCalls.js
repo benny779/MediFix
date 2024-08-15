@@ -18,6 +18,7 @@ import { truncateText } from '../../../utils/stringHelper';
 import { getTimeDifference } from '../../../utils/dateHelper';
 import { handleCallClick } from '../../../utils/browserHelper';
 import { ServiceCallStatus } from '../../../constant';
+import { getUserGreeting } from '../../../utils/util';
 
 const ENDPOINT = 'ServiceCalls/';
 
@@ -67,7 +68,7 @@ const PractitionerServiceCalls = () => {
   ) : (
     <Grid item xs={12} md={6}>
       <Typography sx={{ mb: 1 }} variant='h6' component='div' align='center'>
-        Service calls
+        {getUserGreeting(user.name)}
       </Typography>
       <List sx={{ padding: 0 }}>
         {response.items.map((item) => {

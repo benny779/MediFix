@@ -16,10 +16,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { Outlet, useNavigate } from 'react-router-dom';
 import medifixLogo from '../features/authentication/assets/MediFix.svg';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { useAuth } from '../features/authentication';
 import { refreshPage } from '../utils/browserHelper';
 import { getMenu } from '../routes/routes';
+import { getUserGreeting } from '../utils/util';
 
 const drawerWidth = 240;
 
@@ -71,20 +72,22 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(({ theme, open }) => ({
-  width: drawerWidth,
-  flexShrink: 0,
-  whiteSpace: 'nowrap',
-  boxSizing: 'border-box',
-  ...(open && {
-    ...openedMixin(theme),
-    '& .MuiDrawer-paper': openedMixin(theme),
-  }),
-  ...(!open && {
-    ...closedMixin(theme),
-    '& .MuiDrawer-paper': closedMixin(theme),
-  }),
-}));
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme, open }) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    ...(open && {
+      ...openedMixin(theme),
+      '& .MuiDrawer-paper': openedMixin(theme),
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      '& .MuiDrawer-paper': closedMixin(theme),
+    }),
+  })
+);
 
 export default function PageContainer() {
   const theme = useTheme();
@@ -106,32 +109,30 @@ export default function PageContainer() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
+      <AppBar position='fixed' open={open}>
         <Toolbar>
           <IconButton
-            color="inherit"
-            aria-label="open drawer"
+            color='inherit'
+            aria-label='open drawer'
             onClick={handleDrawerOpen}
-            edge="start"
+            edge='start'
             sx={{
               marginRight: 5,
               ...(open && { display: 'none' }),
-            }}
-          >
+            }}>
             <MenuIcon />
           </IconButton>
-          <AppBar position="fixed" open={open}>
+          <AppBar position='fixed' open={open}>
             <Toolbar>
               <IconButton
-                color="inherit"
-                aria-label="open drawer"
+                color='inherit'
+                aria-label='open drawer'
                 onClick={handleDrawerOpen}
-                edge="start"
+                edge='start'
                 sx={{
                   marginRight: 2,
                   ...(open && { display: 'none' }),
-                }}
-              >
+                }}>
                 <MenuIcon />
               </IconButton>
               <Box
@@ -144,29 +145,28 @@ export default function PageContainer() {
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                }}
-              >
+                }}>
                 <Box
-                  component="img"
+                  component='img'
                   sx={{
                     height: 50,
                     width: 'auto',
                   }}
-                  alt="MediFix Logo"
+                  alt='MediFix Logo'
                   src={medifixLogo}
                 />
               </Box>
-              <Box component="div" sx={{ flexGrow: 1 }} />
+              <Box component='div' sx={{ flexGrow: 1 }} />
               {/* כאן אפשר להוסיף כותרת או אלמנטים נוספים */}
+              {user && <Typography mr={4}>{getUserGreeting(user.name)}</Typography>}
               {user && (
                 <Button
-                  variant="contained"
-                  color="info"
+                  variant='contained'
+                  color='info'
                   onClick={() => {
                     logout();
                     refreshPage();
-                  }}
-                >
+                  }}>
                   Logout
                 </Button>
               )}
@@ -174,7 +174,7 @@ export default function PageContainer() {
           </AppBar>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer variant='permanent' open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
@@ -193,22 +193,19 @@ export default function PageContainer() {
                     sx={{ display: 'block' }}
                     onClick={() => {
                       navigate(item.path);
-                    }}
-                  >
+                    }}>
                     <ListItemButton
                       sx={{
                         minHeight: 48,
                         justifyContent: open ? 'initial' : 'center',
                         px: 2.5,
-                      }}
-                    >
+                      }}>
                       <ListItemIcon
                         sx={{
                           minWidth: 0,
                           mr: open ? 3 : 'auto',
                           justifyContent: 'center',
-                        }}
-                      >
+                        }}>
                         {item.icon}
                       </ListItemIcon>
                       <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0 }} />
@@ -220,7 +217,7 @@ export default function PageContainer() {
           );
         })}
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+      <Box component='main' sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Outlet />
       </Box>
