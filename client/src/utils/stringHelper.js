@@ -4,4 +4,8 @@ const truncateText = (text, maxLength) => {
   return text.substring(0, maxLength - 3) + '...';
 };
 
-export { truncateText };
+const capitalizeFirstLetter = (string) => {
+  return string === null ? null : string.charAt(0).toUpperCase() + string.slice(1);
+};
+
+export { truncateText, capitalizeFirstLetter };
