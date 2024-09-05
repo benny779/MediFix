@@ -62,12 +62,18 @@ const managerRoutes = [
     },
     {
       id: 5,
+      text: 'Practitioners',
+      icon: <InboxIcon />,
+      path: '/manage/practitioners',
+    },
+    {
+      id: 6,
       text: 'Manage Locations',
       icon: <AddIcCallIcon />,
       path: '/manage/locations',
     },
     {
-      id: 6,
+      id: 7,
       text: 'Manage Categories',
       icon: <AddIcCallIcon />,
       path: '/manage/categories',

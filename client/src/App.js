@@ -10,7 +10,7 @@ import {
   ServiceCall,
 } from './features/serviceCalls';
 import { Login, Register, useAuth } from './features/authentication';
-import { Users, User, Locations, Categories, Dashboard } from './features/manage';
+import { Users, User, Locations, Categories, Dashboard, Practitioners } from './features/manage';
 import NotFound from './pages/NotFound';
 import { PractitionerServiceCalls } from './features/practitioner';
 import PractitionerServiceCallView from './features/practitioner/pages/PractitionerServiceCallView';
@@ -55,6 +55,7 @@ function App() {
               <Route path='/manage'>
                 <Route path='users' element={<Users />} exact />
                 <Route path='users/:id' element={<User />} exact />
+                <Route path='practitioners' element={<Practitioners />} exact />
                 <Route path='locations' element={<Locations />} exact />
                 <Route path='categories' element={<Categories />} exact />
               </Route>
