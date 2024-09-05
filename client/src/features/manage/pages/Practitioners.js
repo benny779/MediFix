@@ -1,36 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box,
-  Button,
-  Checkbox,
-  CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  IconButton,
-  List,
-  ListItemButton,
-  ListItemText,
   Paper,
-  Stack,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 import useApiClient from '../../../api';
+import EntityExpertises from '../components/EntityExpertises';
 
 const Practitioners = () => {
   const apiClient = useApiClient();
   const [practitioners, setPractitioners] = useState([]);
   const [expertises, setExpertises] = useState([]);
   const [selectedPractitioner, setSelectedPractitioner] = useState(null);
-  const [showExpertiseDialog, setShowExpertiseDialog] = useState(false);
 
   useEffect(() => {
     const fetchPractitioners = async () => {
@@ -132,46 +118,12 @@ const Practitioners = () => {
       </Box>
 
       {selectedPractitioner && (
-        <Box component={Paper} sx={{ p: 2, width: 270 }}>
-          <Stack direction={'row'} justifyContent={'space-between'}>
-            <Typography variant='h6'>Expertises</Typography>
-            <Button
-              variant='contained'
-              color='primary'
-              onClick={() => setShowExpertiseDialog(true)}>
-              Add
-            </Button>
-          </Stack>
-          <List>
-            {selectedPractitioner.expertises.map((expertise) => (
-              <ListItemButton key={expertise.id}>
-                <ListItemText primary={expertise.name} />
-                <IconButton onClick={() => handleRemoveExpertise(expertise.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemButton>
-            ))}
-          </List>
-
-          <Dialog open={showExpertiseDialog} onClose={() => setShowExpertiseDialog(false)}>
-            <DialogTitle>Add Expertise</DialogTitle>
-            <DialogContent>
-              {expertises
-                .filter(
-                  (expertise) => !selectedPractitioner.expertises.some((e) => e.id === expertise.id)
-                )
-                .map((expertise) => (
-                  <div key={expertise.id}>
-                    <Checkbox checked={false} onChange={() => handleAddExpertise(expertise.id)} />
-                    {expertise.name}
-                  </div>
-                ))}
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setShowExpertiseDialog(false)}>Close</Button>
-            </DialogActions>
-          </Dialog>
-        </Box>
+        <EntityExpertises
+          expertises={expertises}
+          handleAddExpertise={handleAddExpertise}
+          handleRemoveExpertise={handleRemoveExpertise}
+          selectedItemExpertises={selectedPractitioner.expertises}
+        />
       )}
     </Box>
   );
