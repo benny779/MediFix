@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Checkbox,
   Dialog,
@@ -10,7 +9,6 @@ import {
   List,
   ListItemButton,
   ListItemText,
-  Paper,
   Stack,
   Typography,
 } from '@mui/material';
@@ -21,7 +19,7 @@ const EntityExpertises = ({
   expertises,
   handleAddExpertise,
   handleRemoveExpertise,
-  selectedItemExpertises,
+  selectedItemExpertises = [],
 }) => {
   const [showExpertiseDialog, setShowExpertiseDialog] = useState(false);
 
@@ -30,7 +28,7 @@ const EntityExpertises = ({
   );
 
   return (
-    <Box component={Paper} sx={{ p: 2, width: 270 }}>
+    <>
       <Stack direction={'row'} justifyContent={'space-between'}>
         <Typography variant='h6'>Expertises</Typography>
         <Button variant='contained' color='primary' onClick={() => setShowExpertiseDialog(true)}>
@@ -62,7 +60,7 @@ const EntityExpertises = ({
           <Button onClick={() => setShowExpertiseDialog(false)}>Close</Button>
         </DialogActions>
       </Dialog>
-    </Box>
+    </>
   );
 };
 

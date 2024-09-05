@@ -118,12 +118,14 @@ const Practitioners = () => {
       </Box>
 
       {selectedPractitioner && (
-        <EntityExpertises
-          expertises={expertises}
-          handleAddExpertise={handleAddExpertise}
-          handleRemoveExpertise={handleRemoveExpertise}
-          selectedItemExpertises={selectedPractitioner.expertises}
-        />
+        <Box component={Paper} sx={{ p: 2, width: 270 }}>
+          <EntityExpertises
+            expertises={expertises}
+            handleAddExpertise={handleAddExpertise}
+            handleRemoveExpertise={handleRemoveExpertise}
+            selectedItemExpertises={selectedPractitioner.expertises}
+          />
+        </Box>
       )}
     </Box>
   );
