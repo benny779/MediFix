@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Fab, ToggleButton, ToggleButtonGroup, Typography, Link } from '@mui/material';
+import {
+  Box,
+  Fab,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+  Link,
+  Switch,
+  FormControlLabel,
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import fabStyle from '../../../components/fabStyle';
 import TableRowsIcon from '@mui/icons-material/TableRows';
@@ -15,6 +24,7 @@ const ENDPOINT = 'ServiceCalls/';
 
 const ServiceCalls = () => {
   const [displayMode, setDisplayMode] = useState('table');
+  const [showFinished, setShowFinished] = useState(false);
   const { get, isLoading, isSuccess, error, response } = useApiClient();
   const { user } = useAuth();
   const { displayAlert } = useAlert();
@@ -38,9 +48,32 @@ const ServiceCalls = () => {
     error && displayAlert(error);
   }, [displayAlert, error]);
 
+  const handleShowFinished = () => {
+    setShowFinished(!showFinished);
+  };
+
+  const ServiceCallsContent = () => {
+    if (isLoading) return <h1>Loading...</h1>;
+    if (!isSuccess) return;
+
+    const filteredItems = showFinished
+      ? response.items
+      : response.items.filter((x) => x.currentStatus.status.value !== 4);
+
+    return displayMode === 'table' ? (
+      <ServiceCallsTable serviceCalls={filteredItems} />
+    ) : (
+      <CardView serviceCalls={filteredItems} />
+    );
+  };
+
   return (
     <>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 2 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 2 }} gap={5}>
+        <FormControlLabel
+          control={<Switch onChange={handleShowFinished} checked={showFinished} />}
+          label='Show finished'
+        />
         <ToggleButtonGroup
           value={displayMode}
           exclusive
@@ -55,26 +88,8 @@ const ServiceCalls = () => {
         </ToggleButtonGroup>
       </Box>
 
-      {isLoading ? (
-        <h1>Loading...</h1>
-      ) : !isSuccess ? (
-        <Box sx={{ textAlign: 'center', mt: 4 }}>
-          <Typography variant='h5' gutterBottom>
-            This user has no service calls
-          </Typography>
-          <Typography variant='body1'>
-            <Link href='#' onClick={handleNewServiceCall} underline='hover'>
-              To move to opening a new service call, click here
-            </Link>
-          </Typography>
-        </Box>
-      ) : displayMode === 'table' ? (
-        <ServiceCallsTable serviceCalls={response.items} />
-      ) : (
-        <CardView serviceCalls={response} />
-      )}
+      <ServiceCallsContent />
 
-      {/* <CreateServiceCallForm/> */}
       <Fab color='primary' style={fabStyle} onClick={handleNewServiceCall}>
         <AddIcon />
       </Fab>

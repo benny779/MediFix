@@ -14,12 +14,13 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { formatJsonDateTime } from '../../../utils/dateHelper';
 import { Tooltip, Dialog, DialogTitle, DialogActions, Button, DialogContent } from '@mui/material';
-import { lightGreen, yellow } from '@mui/material/colors';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
-import CableIcon from '@mui/icons-material/Cable';
-import AssignToPractitioner from './AssignToPractitioner'; // Ensure the path is correct
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import AssignToPractitioner from './AssignToPractitioner';
 import { refreshPage } from '../../../utils/browserHelper';
+import { truncateText } from '../../../utils/stringHelper';
+import { useNavigate } from 'react-router-dom';
 
 const tableHeaders = [
   'Category',
@@ -28,19 +29,42 @@ const tableHeaders = [
   'Details',
   'Location',
   'Status',
-  'Technician',
-  '',
+  'Practitioner',
+  'Actions',
 ];
+
+function ActionButtons({ row, onDelete, onEdit, onAssign }) {
+  return (
+    <Box display='flex' justifyContent='flex-end' gap={1}>
+      {!row.practitioner && row.currentStatus.status.value !== 5 && (
+        <>
+          <Tooltip title={'Cancel'}>
+            <IconButton onClick={onDelete}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={'Edit'}>
+            <IconButton onClick={onEdit}>
+              <CreateIcon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title={'Assign to practitioner'}>
+            <IconButton onClick={onAssign}>
+              <PersonAddIcon />
+            </IconButton>
+          </Tooltip>
+        </>
+      )}
+    </Box>
+  );
+}
 
 function Row(props) {
   const { row } = props;
+  const navigate = useNavigate();
+
   const [open, setOpen] = useState(false);
   const [openAssignDialog, setOpenAssignDialog] = useState(false);
-  const green = lightGreen.A400;
-  const myYellow = yellow[400];
-  const deleteTitleString = 'Cannot be canceled - Already assigned to a technician';
-  const editTitleString = 'This call cannot be edited due to being assigned to a technician';
-  const associateTitleString = 'This call cannot be assigned to an already assigned technician';
 
   const { location } = row;
   const building = location.building.name;
@@ -50,7 +74,13 @@ function Row(props) {
   const subCategoryId = row.subCategory.id;
   const serviceCallId = row.id;
 
-  const category = `${row.category.name} | ${row.subCategory.name}`;
+  const category = (
+    <span>
+      {row.category.name}
+      <br />
+      {row.subCategory.name}
+    </span>
+  );
   const depAndRoom = `${department} - ${room}`;
   const locationString = `Building ${building}, Floor ${floor}, ${department}, Room ${room}`;
 
@@ -60,8 +90,7 @@ function Row(props) {
       : null;
 
   const handleRowClick = () => {
-    console.log('Row clicked:', row);
-    // Add logic to handle row click here
+    navigate(`/serviceCalls/${row.id}`);
   };
 
   const handleDelete = (event) => {
@@ -89,7 +118,6 @@ function Row(props) {
         onClick={handleRowClick}>
         <TableCell>
           <IconButton
-            aria-label='expand row'
             size='small'
             onClick={(event) => {
               event.stopPropagation();
@@ -101,69 +129,31 @@ function Row(props) {
         <TableCell>{category}</TableCell>
         <TableCell>{formatJsonDateTime(row.dateCreated)}</TableCell>
         <TableCell>{closedDateTime}</TableCell>
-        <TableCell>{row.details}</TableCell>
+        <Tooltip title={row.details} placement='left'>
+          <TableCell>{truncateText(row.details, 50)}</TableCell>
+        </Tooltip>
         <Tooltip title={locationString}>
           <TableCell>{depAndRoom}</TableCell>
         </Tooltip>
         <TableCell>{row.currentStatus.status.name}</TableCell>
         <TableCell>{row.practitioner?.fullName}</TableCell>
         <TableCell>
-          {row.practitioner ? (
-            <Tooltip title={deleteTitleString}>
-              <span>
-                <IconButton disabled>
-                  <DeleteIcon />
-                </IconButton>
-              </span>
-            </Tooltip>
-          ) : (
-            <Tooltip title={'Cancel Service Call'}>
-              <IconButton aria-label='Cancelation' sx={{ color: green }} onClick={handleDelete}>
-                <DeleteIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-
-          {row.practitioner ? (
-            <Tooltip title={editTitleString}>
-              <span>
-                <IconButton disabled>
-                  <CreateIcon />
-                </IconButton>
-              </span>
-            </Tooltip>
-          ) : (
-            <Tooltip title={'Edit Service Call'}>
-              <IconButton aria-label='create' sx={{ color: myYellow }} onClick={handleEdit}>
-                <CreateIcon />
-              </IconButton>
-            </Tooltip>
-          )}
-          {row.practitioner ? (
-            <Tooltip title={associateTitleString}>
-              <span>
-                <IconButton disabled>
-                  <CableIcon />
-                </IconButton>
-              </span>
-            </Tooltip>
-          ) : (
-            <Tooltip title={'Associate Service Call'}>
-              <IconButton aria-label='associate' sx={{ color: myYellow }} onClick={handleAssign}>
-                <CableIcon />
-              </IconButton>
-            </Tooltip>
-          )}
+          <ActionButtons
+            row={row}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+            onAssign={handleAssign}
+          />
         </TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
           <Collapse in={open} timeout='auto' unmountOnExit>
-            <Box sx={{ margin: 1 }}>
+            <Box sx={{ margin: 1, marginLeft: 6 }}>
               <Typography variant='h6' gutterBottom component='div'>
                 Status History
               </Typography>
-              <Table size='small' aria-label='purchases'>
+              <Table size='small' sx={{ width: 'auto' }}>
                 <TableHead>
                   <TableRow>
                     <TableCell>Status</TableCell>
@@ -205,7 +195,7 @@ function Row(props) {
 function ServiceCallsTable({ serviceCalls }) {
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden', maxHeight: '100%' }}>
-      <TableContainer sx={{ maxHeight: '100%' }}>
+      <TableContainer sx={{ maxHeight: 700 }}>
         <Table stickyHeader>
           <TableHead>
             <TableRow>
