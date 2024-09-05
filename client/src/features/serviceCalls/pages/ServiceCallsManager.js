@@ -42,7 +42,7 @@ const ManagerServiceCalls = () => {
       : response.items.filter((x) => x.currentStatus.status.value !== 4);
 
     return displayMode === 'table' ? (
-      <ServiceCallsTable serviceCalls={filteredItems} />
+      <ServiceCallsTable serviceCalls={filteredItems} showActionButtons />
     ) : (
       <CardView serviceCalls={filteredItems} />
     );

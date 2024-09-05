@@ -14,13 +14,13 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { formatJsonDateTime } from '../../../utils/dateHelper';
 import { Tooltip, Dialog, DialogTitle, DialogActions, Button, DialogContent } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import CreateIcon from '@mui/icons-material/Create';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+
 import AssignToPractitioner from './AssignToPractitioner';
 import { refreshPage } from '../../../utils/browserHelper';
 import { truncateText } from '../../../utils/stringHelper';
-import { useNavigate } from 'react-router-dom';
+import useApiClient from '../../../api';
+import ActionButtons from '../components/ActionButtons';
+// import { useNavigate } from 'react-router-dom';
 
 const tableHeaders = [
   'Category',
@@ -30,38 +30,13 @@ const tableHeaders = [
   'Location',
   'Status',
   'Practitioner',
-  'Actions',
 ];
-
-function ActionButtons({ row, onDelete, onEdit, onAssign }) {
-  return (
-    <Box display='flex' justifyContent='flex-end' gap={1}>
-      {!row.practitioner && row.currentStatus.status.value !== 5 && (
-        <>
-          <Tooltip title={'Cancel'}>
-            <IconButton onClick={onDelete}>
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={'Edit'}>
-            <IconButton onClick={onEdit}>
-              <CreateIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title={'Assign to practitioner'}>
-            <IconButton onClick={onAssign}>
-              <PersonAddIcon />
-            </IconButton>
-          </Tooltip>
-        </>
-      )}
-    </Box>
-  );
-}
+const actionButtonsHeader = 'Actions';
 
 function Row(props) {
-  const { row } = props;
-  const navigate = useNavigate();
+  const { row, showActionButtons } = props;
+  const apiClient = useApiClient();
+  // const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
   const [openAssignDialog, setOpenAssignDialog] = useState(false);
@@ -90,13 +65,12 @@ function Row(props) {
       : null;
 
   const handleRowClick = () => {
-    navigate(`/serviceCalls/${row.id}`);
+    // navigate(`/serviceCalls/${row.id}`);
   };
 
-  const handleDelete = (event) => {
-    event.stopPropagation();
-    console.log('Cancellation service call:', row.id);
-    // Add logic to delete the service call here
+  const handleDelete = async (event) => {
+    const { isSuccess } = await apiClient.patch(`ServiceCalls/${row.id}/cancel`);
+    if (isSuccess) refreshPage();
   };
 
   const handleEdit = (event) => {
@@ -137,14 +111,16 @@ function Row(props) {
         </Tooltip>
         <TableCell>{row.currentStatus.status.name}</TableCell>
         <TableCell>{row.practitioner?.fullName}</TableCell>
-        <TableCell>
-          <ActionButtons
-            row={row}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-            onAssign={handleAssign}
-          />
-        </TableCell>
+        {showActionButtons && (
+          <TableCell>
+            <ActionButtons
+              row={row}
+              onDelete={handleDelete}
+              onEdit={handleEdit}
+              onAssign={handleAssign}
+            />
+          </TableCell>
+        )}
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={9}>
@@ -192,7 +168,10 @@ function Row(props) {
   );
 }
 
-function ServiceCallsTable({ serviceCalls }) {
+function ServiceCallsTable({ serviceCalls, showActionButtons }) {
+  const headers = [...tableHeaders];
+  if (showActionButtons) headers.push(actionButtonsHeader);
+
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden', maxHeight: '100%' }}>
       <TableContainer sx={{ maxHeight: 700 }}>
@@ -200,14 +179,14 @@ function ServiceCallsTable({ serviceCalls }) {
           <TableHead>
             <TableRow>
               <TableCell />
-              {tableHeaders.map((col) => (
+              {headers.map((col) => (
                 <TableCell key={col}>{col}</TableCell>
               ))}
             </TableRow>
           </TableHead>
           <TableBody>
             {serviceCalls.map((row) => (
-              <Row key={row.id} row={row} />
+              <Row key={row.id} row={row} showActionButtons={showActionButtons} />
             ))}
           </TableBody>
         </Table>

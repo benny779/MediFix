@@ -256,7 +256,7 @@ const Locations = () => {
             </Box>
             {editItem?.id && (
               <Box mr={4}>
-                <QRCodeSVG value={editItem.id} title='QR Code'/>
+                <QRCodeSVG value={editItem.id} title='QR Code' />
               </Box>
             )}
           </Box>
