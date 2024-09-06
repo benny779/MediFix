@@ -35,6 +35,7 @@ import { formatJsonDateTime, getTimeDifference } from '../../../utils/dateHelper
 import useApiClient from '../../../api';
 import { ServiceCallStatus } from '../../../constant';
 import QrScanner from 'qr-scanner';
+import { useAlert } from '../../../context/AlertContext';
 
 const getStatusChip = (status) => {
   const statusColors = {
@@ -51,11 +52,12 @@ const getStatusChip = (status) => {
   );
 };
 
-const qrEnabled = false;
+const qrEnabled = true;
 
 const PractitionerServiceCallView = () => {
   const { id } = useParams();
   const { get, patch, isLoading, isSuccess } = useApiClient();
+  const { displayAlert } = useAlert();
   const [item, setItem] = useState(null);
 
   const navigate = useNavigate();
@@ -100,36 +102,25 @@ const PractitionerServiceCallView = () => {
     setIsQRDialogOpen(false);
   };
 
+  let qrScanCount = 0;
   const handleQRScan = async (result) => {
-    if (!result) return;
-
-    console.log(result.data);
+    if (!result || ++qrScanCount > 1) return;
     handleQRDialogClose();
-
-    // try {
-    //   const result = await post('verify-qr', { qrContent: scannedContent });
-    //   if (result.ok) {
-    //     setIsQRDialogOpen(false);
-    //     handleServiceCallClose();
-    //   } else {
-    //     console.error('QR verification failed');
-    //   }
-    // } catch (error) {
-    //   console.error('Error during QR verification:', error);
-    // }
-
-    handleServiceCallClose();
+    handleServiceCallClose(result.data);
   };
 
-  const handleServiceCallClose = async () => {
-    console.log('handleServiceCallClose');
-    // const { isSuccess } = await patch(`serviceCalls/${id}/close`, {
-    //   serviceCallId: id,
-    //   item.closeDetails,
-    // });
-    // if (isSuccess) {
-    //   onBack();
-    // }
+  const handleServiceCallClose = async (qrCode) => {
+    const { isSuccess, error } = await patch(`serviceCalls/${id}/close`, {
+      serviceCallId: id,
+      closeDetails: item.closeDetails,
+      qrCode,
+    });
+
+    if (isSuccess) {
+      onBack();
+    } else {
+      displayAlert(error);
+    }
   };
 
   const fetchServiceCall = async () => {
@@ -153,7 +144,9 @@ const PractitionerServiceCallView = () => {
   }, [qrScanner]);
 
   if (isLoading) return <CircularProgress />;
-  if (!isSuccess) return <Typography color='error'>Failed to load service call</Typography>;
+  if (!isSuccess) {
+    return <Typography color='error'>Failed to load service call</Typography>;
+  }
 
   const isStarted = item.currentStatus.status.value === ServiceCallStatus.started;
   const isFinished = item.currentStatus.status.value === ServiceCallStatus.finished;
