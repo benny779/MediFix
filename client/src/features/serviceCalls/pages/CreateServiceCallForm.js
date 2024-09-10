@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Box,
   Button,
   Container,
@@ -17,6 +18,7 @@ import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useServiceCallApi } from '../services/useServiceCallApi';
 import { SelectField } from '../components/SelectField';
 import { useAlert } from '../../../context/AlertContext';
+import { Roles } from '../../../constant';
 
 const detailsTextFieldRows = 5;
 const required = 'Required';
@@ -44,12 +46,15 @@ const CreateServiceCallForm = () => {
     setValue,
     getValues,
   } = useForm();
-  const { user } = useAuth();
+  const { user, type } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
   const api = useServiceCallApi();
   const { displayAlert } = useAlert();
+  const [clientId, setClientId] = useState(null);
+
+  const isManager = type === Roles.manager;
 
   const [formData, setFormData] = useState({
     buildings: [],
@@ -58,7 +63,12 @@ const CreateServiceCallForm = () => {
     rooms: [],
     categories: [],
     subCategories: [],
+    clients: [],
   });
+
+  const handleClientChange = (e, value) => {
+    setClientId(value?.id);
+  };
 
   useEffect(() => {
     const initForm = async () => {
@@ -68,8 +78,10 @@ const CreateServiceCallForm = () => {
         const buildings = await api.fetchBuildings();
         setFormData((prev) => ({ ...prev, buildings }));
       }
+
       const categories = await api.fetchCategories();
-      setFormData((prev) => ({ ...prev, categories }));
+      const clients = await api.fetchClients();
+      setFormData((prev) => ({ ...prev, categories, clients }));
     };
 
     initForm();
@@ -132,7 +144,7 @@ const CreateServiceCallForm = () => {
 
   const onSubmit = async (data) => {
     const serviceCall = {
-      clientId: user.sub,
+      clientId: clientId || user.sub,
       locationId: data.room,
       serviceCallType: data.type,
       subCategoryId: data.subCategory,
@@ -152,6 +164,23 @@ const CreateServiceCallForm = () => {
         </Typography>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={3}>
+            {isManager && (
+              <>
+                <Grid item xs={12}>
+                  <Autocomplete
+                    disablePortal
+                    onChange={handleClientChange}
+                    options={formData.clients.map((c) => ({ label: c.fullName, id: c.clientId }))}
+                    renderInput={(params) => <TextField {...params} label='Client' />}
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Divider />
+                </Grid>
+              </>
+            )}
+
             <Grid item xs={12} md={6}>
               <SelectField
                 label='Building'
