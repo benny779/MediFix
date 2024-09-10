@@ -25,13 +25,14 @@ import ActionButtons from '../components/ActionButtons';
 const tableHeaders = [
   'Category',
   'Created',
-  'Closed',
+  // 'Closed',
   'Details',
   'Location',
   'Status',
   'Practitioner',
 ];
 const actionButtonsHeader = 'Actions';
+const clientHeader = 'Client';
 
 function Row(props) {
   const { row, showActionButtons } = props;
@@ -59,10 +60,10 @@ function Row(props) {
   const depAndRoom = `${department} - ${room}`;
   const locationString = `Building ${building}, Floor ${floor}, ${department}, Room ${room}`;
 
-  const closedDateTime =
-    row.currentStatus.status.value === 4 /*Closed*/
-      ? formatJsonDateTime(row.currentStatus.dateTime)
-      : null;
+  // const closedDateTime =
+  //   row.currentStatus.status.value === 4 /*Closed*/
+  //     ? formatJsonDateTime(row.currentStatus.dateTime)
+  //     : null;
 
   const handleRowClick = () => {
     // navigate(`/serviceCalls/${row.id}`);
@@ -102,10 +103,11 @@ function Row(props) {
         </TableCell>
         <TableCell>{category}</TableCell>
         <TableCell>{formatJsonDateTime(row.dateCreated)}</TableCell>
-        <TableCell>{closedDateTime}</TableCell>
+        {/* <TableCell>{closedDateTime}</TableCell> */}
         <Tooltip title={row.details} placement='left'>
           <TableCell>{truncateText(row.details, 50)}</TableCell>
         </Tooltip>
+        {showActionButtons && <TableCell>{row.client.fullName}</TableCell>}
         <Tooltip title={locationString}>
           <TableCell>{depAndRoom}</TableCell>
         </Tooltip>
@@ -170,7 +172,10 @@ function Row(props) {
 
 function ServiceCallsTable({ serviceCalls, showActionButtons }) {
   const headers = [...tableHeaders];
-  if (showActionButtons) headers.push(actionButtonsHeader);
+  if (showActionButtons) {
+    headers.splice(3, 0, clientHeader);
+    headers.push(actionButtonsHeader);
+  }
 
   return (
     <Paper sx={{ width: '100%', overflow: 'hidden', maxHeight: '100%' }}>
