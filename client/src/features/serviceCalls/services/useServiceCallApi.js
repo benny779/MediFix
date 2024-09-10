@@ -21,6 +21,7 @@ export const useServiceCallApi = () => {
     fetchCategories: () => fetchData('Categories'),
     fetchSubCategories: (categoryId) => fetchData(`SubCategories`, { categoryId }),
     fetchLocation: (locationId) => fetchData(`Locations/${locationId}`, { withParents: true }),
+    fetchClients: () => fetchData('Clients'),
     submitServiceCall: (data) => apiClient.post('ServiceCalls', data),
   };
 };
