@@ -8,4 +8,10 @@ const capitalizeFirstLetter = (string) => {
   return string === null ? null : string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-export { truncateText, capitalizeFirstLetter };
+const spreadTrim = (str, char) => {
+  const first = [...str].findIndex((c) => c !== char);
+  const last = [...str].reverse().findIndex((c) => c !== char);
+  return str.substring(first, str.length - last);
+};
+
+export { truncateText, capitalizeFirstLetter, spreadTrim };

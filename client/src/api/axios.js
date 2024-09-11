@@ -1,4 +1,5 @@
 import Axios from 'axios';
+import { spreadTrim } from '../utils/stringHelper';
 
 export const axios = Axios.create({
   baseURL: process.env.REACT_APP_API_SERVER_BASE_URL,
@@ -27,13 +28,14 @@ export const setupAxiosInterceptors = (
     (response) => response,
     async (error) => {
       const originalRequest = error.config;
-      
+      const originalRequestUrl = spreadTrim(originalRequest.url, '/');
+
       const needsRefresh =
         error.response?.status === 401 &&
-        originalRequest.url !== 'Account/login' &&
-        originalRequest.url !== 'Account/refresh' &&
+        originalRequestUrl !== 'Account/login' &&
+        originalRequestUrl !== 'Account/refresh' &&
         !originalRequest._retry;
-        
+
       if (needsRefresh) {
         originalRequest._retry = true;
         try {
