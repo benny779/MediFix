@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Fab, FormControlLabel, Switch, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import fabStyle from '../../../components/fabStyle';
+import { Box, FormControlLabel, Switch, ToggleButton, ToggleButtonGroup } from '@mui/material';
 import TableRowsIcon from '@mui/icons-material/TableRows';
 import AppsIcon from '@mui/icons-material/Apps';
 import useApiClient from '../../../api';
@@ -9,7 +7,7 @@ import { useAlert } from '../../../context/AlertContext';
 import CardView from './CardView';
 import ServiceCallsTable from './ServiceCallsTable';
 
-const ENDPOINT = 'serviceCalls/';
+const ENDPOINT = 'serviceCalls';
 
 const ManagerServiceCalls = () => {
   const [displayMode, setDisplayMode] = useState('table');
@@ -70,10 +68,6 @@ const ManagerServiceCalls = () => {
       </Box>
 
       <ServiceCallsContent />
-
-      <Fab color='primary' style={fabStyle}>
-        <AddIcon />
-      </Fab>
     </>
   );
 };
