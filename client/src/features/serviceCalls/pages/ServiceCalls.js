@@ -40,8 +40,7 @@ const ServiceCalls = () => {
   const handleDisplayMode = (e, value) => setDisplayMode(value);
 
   const handleNewServiceCall = () => {
-    navigate('new', { replace: true });
-    console.log('Starting a new service call');
+    navigate('new');
   };
 
   useEffect(() => {
