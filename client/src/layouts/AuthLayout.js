@@ -1,11 +1,11 @@
-import { Button, Grid, Stack, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Button, Grid, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { banner } from '../features/authentication';
 import Image from 'mui-image';
+import useDense from '../hooks/useDense';
 
 const AuthLayout = ({ children, header, bottomButton }) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { isMobile } = useDense();
 
   return (
     <Grid
@@ -14,7 +14,6 @@ const AuthLayout = ({ children, header, bottomButton }) => {
       alignItems='center'
       sx={{
         minHeight: '96vh',
-        backgroundColor: theme.palette.background.default,
       }}>
       <Grid
         container
