@@ -59,11 +59,7 @@ const RegisterForm = () => {
 
   return (
     <AuthLayout header='Register Form' bottomButton={{ text: 'Login', target: '/login' }}>
-      <Button variant='outlined' sx={{ borderRadius: 8, paddingX: 4 }} startIcon={<GoogleIcon />}>
-        sign in with google
-      </Button>
       <Stack minWidth='100%' gap={2} sx={{ marginTop: 2 }}>
-        <Divider>or</Divider>
         <form onSubmit={handleSubmit}>
           <Stack gap={2}>
             <TextField
