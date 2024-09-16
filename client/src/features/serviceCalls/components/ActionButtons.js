@@ -4,13 +4,13 @@ import DeleteIcon from '@mui/icons-material/Delete';
 // import CreateIcon from '@mui/icons-material/Create';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
-const ActionButtons = ({ row, onDelete, onEdit, onAssign }) => {
+const ActionButtons = ({ row, onDelete: onCancel, onEdit, onAssign }) => {
   return (
     <Box display='flex' justifyContent='flex-end' gap={1}>
       {!row.practitioner && row.currentStatus.status.value !== 5 && (
         <>
           <Tooltip title={'Cancel'}>
-            <IconButton onClick={onDelete}>
+            <IconButton onClick={onCancel}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
