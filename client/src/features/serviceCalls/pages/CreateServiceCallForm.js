@@ -19,6 +19,7 @@ import { useServiceCallApi } from '../services/useServiceCallApi';
 import { SelectField } from '../components/SelectField';
 import { useAlert } from '../../../context/AlertContext';
 import { Roles } from '../../../constant';
+import useDense from '../../../hooks/useDense';
 
 const detailsTextFieldRows = 5;
 const required = 'Required';
@@ -36,6 +37,7 @@ const serviceCallPriority = [
 
 const CreateServiceCallForm = () => {
   const [searchParams] = useSearchParams();
+  const { size, largeSize } = useDense();
   const locationId = searchParams.get('locationId');
   const [isLocationFromParam, setIsLocationFromParam] = useState(false);
   const {
@@ -191,6 +193,7 @@ const CreateServiceCallForm = () => {
                 errors={errors}
                 disabled={isLocationFromParam}
                 onChange={(e) => handleChange('building', e.target.value)}
+                size={size}
               />
             </Grid>
 
@@ -204,6 +207,7 @@ const CreateServiceCallForm = () => {
                 errors={errors}
                 disabled={isLocationFromParam}
                 onChange={(e) => handleChange('floor', e.target.value)}
+                size={size}
               />
             </Grid>
 
@@ -217,6 +221,7 @@ const CreateServiceCallForm = () => {
                 errors={errors}
                 disabled={isLocationFromParam}
                 onChange={(e) => handleChange('department', e.target.value)}
+                size={size}
               />
             </Grid>
 
@@ -230,6 +235,7 @@ const CreateServiceCallForm = () => {
                 errors={errors}
                 disabled={isLocationFromParam}
                 onChange={(e) => handleChange('room', e.target.value)}
+                size={size}
               />
             </Grid>
 
@@ -246,6 +252,7 @@ const CreateServiceCallForm = () => {
                 getValues={getValues}
                 errors={errors}
                 onChange={(e) => handleChange('type', e.target.value)}
+                size={size}
               />
             </Grid>
 
@@ -258,6 +265,7 @@ const CreateServiceCallForm = () => {
                 getValues={getValues}
                 errors={errors}
                 onChange={(e) => handleChange('category', e.target.value)}
+                size={size}
               />
             </Grid>
 
@@ -270,6 +278,7 @@ const CreateServiceCallForm = () => {
                 getValues={getValues}
                 errors={errors}
                 onChange={(e) => handleChange('subCategory', e.target.value)}
+                size={size}
               />
             </Grid>
 
@@ -301,6 +310,7 @@ const CreateServiceCallForm = () => {
                   errors={errors}
                   defaultValue={'1'}
                   onChange={(e) => handleChange('priority', e.target.value)}
+                  size={size}
                 />
               </FormControl>
             </Grid>
@@ -310,7 +320,7 @@ const CreateServiceCallForm = () => {
                 <Button
                   type='submit'
                   variant='contained'
-                  size='large'
+                  size={largeSize}
                   disabled={!isValid}
                   sx={{ minWidth: 120 }}>
                   Submit

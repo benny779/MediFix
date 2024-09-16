@@ -10,8 +10,9 @@ export const SelectField = ({
   disabled,
   onChange,
   defaultValue,
+  size,
 }) => (
-  <FormControl fullWidth>
+  <FormControl fullWidth size={size}>
     <InputLabel>{label}</InputLabel>
     <Select
       label={label}
