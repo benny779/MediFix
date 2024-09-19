@@ -11,6 +11,7 @@ import ServiceCallTableRow from '../components/ServiceCallTableRow';
 // import { useNavigate } from 'react-router-dom';
 
 const tableHeaders = [
+  '',
   'Category',
   'Created',
   // 'Closed',
@@ -21,11 +22,12 @@ const tableHeaders = [
 ];
 const actionButtonsHeader = 'Actions';
 const clientHeader = 'Client';
+const headerBackroundColor = '#d4d4d4';
 
 function ServiceCallsTable({ serviceCalls, showActionButtons }) {
   const headers = [...tableHeaders];
   if (showActionButtons) {
-    headers.splice(3, 0, clientHeader);
+    headers.splice(4, 0, clientHeader);
     headers.push(actionButtonsHeader);
   }
 
@@ -35,9 +37,10 @@ function ServiceCallsTable({ serviceCalls, showActionButtons }) {
         <Table stickyHeader>
           <TableHead>
             <TableRow>
-              <TableCell />
               {headers.map((col) => (
-                <TableCell key={col}>{col}</TableCell>
+                <TableCell key={col} sx={{ backgroundColor: headerBackroundColor }}>
+                  {col}
+                </TableCell>
               ))}
             </TableRow>
           </TableHead>
