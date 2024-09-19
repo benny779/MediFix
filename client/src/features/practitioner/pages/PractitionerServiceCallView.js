@@ -36,6 +36,7 @@ import useApiClient from '../../../api';
 import { ServiceCallStatus } from '../../../constant';
 import QrScanner from 'qr-scanner';
 import { useAlert } from '../../../context/AlertContext';
+import Spinner from '../../../components/ui/Spinner';
 
 const getStatusChip = (status) => {
   const statusColors = {
@@ -143,7 +144,7 @@ const PractitionerServiceCallView = () => {
     };
   }, [qrScanner]);
 
-  if (isLoading) return <CircularProgress />;
+  if (isLoading) return <Spinner />;
   if (!isSuccess) {
     return <Typography color='error'>Failed to load service call</Typography>;
   }

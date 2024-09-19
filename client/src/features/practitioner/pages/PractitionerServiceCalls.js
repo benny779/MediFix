@@ -19,6 +19,7 @@ import { getTimeDifference } from '../../../utils/dateHelper';
 import { handleCallClick } from '../../../utils/browserHelper';
 import { ServiceCallStatus } from '../../../constant';
 import { getUserGreeting } from '../../../utils/util';
+import Spinner from '../../../components/ui/Spinner';
 
 const ENDPOINT = 'ServiceCalls/';
 
@@ -58,7 +59,7 @@ const PractitionerServiceCalls = () => {
   }, [displayAlert, error]);
 
   return isLoading ? (
-    <h1>Loading...</h1>
+    <Spinner />
   ) : !isSuccess ? (
     <Box sx={{ textAlign: 'center', mt: 4 }}>
       <Typography variant='h5' gutterBottom>

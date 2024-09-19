@@ -18,6 +18,7 @@ import {
 import useApiClient from '../../../api';
 import { capitalizeFirstLetter } from '../../../utils/stringHelper';
 import EntityExpertises from '../components/EntityExpertises';
+import Spinner from '../../../components/ui/Spinner';
 
 const Categories = () => {
   const apiClient = useApiClient();
@@ -222,7 +223,7 @@ const Categories = () => {
     </Box>
   );
 
-  if (apiClient.isLoading) return <CircularProgress />;
+  if (apiClient.isLoading) return <Spinner />;
 
   return (
     <Box display='flex'>

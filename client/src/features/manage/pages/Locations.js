@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { QRCodeSVG } from 'qrcode.react';
 import useApiClient from '../../../api';
+import Spinner from '../../../components/ui/Spinner';
 
 const ENDPOINT = 'Locations';
 
@@ -222,7 +223,7 @@ const Locations = () => {
     </Box>
   );
 
-  if (apiClient.isLoading) return <CircularProgress />;
+  if (apiClient.isLoading) return <Spinner />;
 
   return (
     <Box display='flex'>
