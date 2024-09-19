@@ -22,7 +22,7 @@ const getDefaultRoute = (type) => {
     case Roles.client:
       return '/serviceCalls';
     case Roles.manager:
-      return 'manager/serviceCalls';
+      return 'serviceCalls';
     case Roles.practitioner:
       return 'practitioner/serviceCalls';
     default:
@@ -44,7 +44,6 @@ function App() {
         <Route element={<PrivateRoutes />}>
           <Route element={<PageContainer />}>
             <Route path='/' element={<Navigate to={getDefaultRoute(type)} replace />} />
-            <Route path='/manager/serviceCalls' element={<ServiceCallsManager />} exact />
             <Route path='/serviceCalls'>
               <Route index element={<ServiceCalls />} exact />
               <Route path=':id' element={<ServiceCall />} exact />
