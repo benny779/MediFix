@@ -43,21 +43,22 @@ const Users = () => {
   const { displayAlert } = useAlert();
 
   const onSubmit = async (user) => {
+    user = { ...user, confirmPassword: user.password };
     const { isSuccess, error } = await apiClient.post('Account/register', user);
     isSuccess ? navigate(from, { replace: true }) : displayAlert(error);
   };
 
   return (
-    <Container maxWidth='md'>
+    <Container maxWidth="md">
       <Paper elevation={3} sx={{ padding: { xs: 2, md: 4 }, marginY: 4 }}>
-        <Typography variant='h4' component='h1' gutterBottom marginBottom={5} align='center'>
+        <Typography variant="h4" component="h1" gutterBottom marginBottom={5} align="center">
           New user
         </Typography>
         <form noValidate onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6}>
               <TextField
-                label='First Name'
+                label="First Name"
                 {...register('firstName', { required })}
                 error={!!errors.firstName}
                 helperText={errors.firstName?.message}
@@ -67,7 +68,7 @@ const Users = () => {
 
             <Grid item xs={12} md={6}>
               <TextField
-                label='Lase Name'
+                label="Lase Name"
                 {...register('lastName', { required })}
                 error={!!errors.lastName}
                 helperText={errors.lastName?.message}
@@ -77,9 +78,9 @@ const Users = () => {
 
             <Grid item xs={12} md={6}>
               <TextField
-                label='Email address'
+                label="Email address"
                 {...register('email', { required, validate: isValidEmail })}
-                type='email'
+                type="email"
                 error={!!errors.email}
                 helperText={errors.email?.message || (!!errors.email && 'Invalid email address')}
                 fullWidth
@@ -88,7 +89,7 @@ const Users = () => {
 
             <Grid item xs={12} md={6}>
               <TextField
-                label='Phone number'
+                label="Phone number"
                 {...register('phoneNumber')}
                 error={!!errors.phoneNumber}
                 helperText={errors.phoneNumber?.message}
@@ -103,11 +104,7 @@ const Users = () => {
             <Grid item xs={12} md={6}>
               <FormControl fullWidth>
                 <InputLabel>Type</InputLabel>
-                <Select
-                  label='Type'
-                  {...register('userType', { required })}
-                  defaultValue={1}
-                  errors={errors}>
+                <Select label="Type" {...register('userType', { required })} defaultValue={1} errors={errors}>
                   {userTypeEnum.map((option) => (
                     <MenuItem key={option.id} value={option.id}>
                       {option.name}
@@ -120,8 +117,8 @@ const Users = () => {
 
             <Grid item xs={12} md={6}>
               <TextField
-                label='Password'
-                type='password'
+                label="Password"
+                type="password"
                 {...register('password', { required, validate: isValidPassword })}
                 error={!!errors.password}
                 helperText={errors.password?.message || (!!errors.password && 'Invalid password')}
@@ -132,11 +129,12 @@ const Users = () => {
             <Grid item xs={12}>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <Button
-                  type='submit'
-                  variant='contained'
-                  size='large'
+                  type="submit"
+                  variant="contained"
+                  size="large"
                   // disabled={!isValid}
-                  sx={{ minWidth: 120 }}>
+                  sx={{ minWidth: 120 }}
+                >
                   Submit
                 </Button>
               </Box>
@@ -144,7 +142,7 @@ const Users = () => {
           </Grid>
         </form>
       </Paper>
-      <DevTool control={control} placement='top-left'></DevTool>
+      <DevTool control={control} placement="top-left"></DevTool>
     </Container>
   );
 };
