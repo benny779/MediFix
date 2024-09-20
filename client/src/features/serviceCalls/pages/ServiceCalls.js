@@ -94,7 +94,7 @@ const ServiceCalls = () => {
     return displayMode === 'table' ? (
       <ServiceCallsTable serviceCalls={filteredItems} showActionButtons={isManager} />
     ) : (
-      <CardView serviceCalls={filteredItems} />
+      <CardView serviceCalls={filteredItems} showActionButtons={isManager} />
     );
   };
 
