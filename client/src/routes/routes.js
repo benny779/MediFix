@@ -1,5 +1,11 @@
 import InboxIcon from '@mui/icons-material/MoveToInbox';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import ListAltIcon from '@mui/icons-material/ListAlt';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
+import PeopleIcon from '@mui/icons-material/People';
+import EngineeringIcon from '@mui/icons-material/Engineering';
+import EditLocationAltIcon from '@mui/icons-material/EditLocationAlt';
+import CategoryIcon from '@mui/icons-material/Category';
 import { Roles } from '../constant';
 
 const clientRoutes = [
@@ -35,7 +41,7 @@ const managerRoutes = [
     {
       id: 1,
       text: 'Dashboard',
-      icon: <InboxIcon />,
+      icon: <DashboardIcon  />,
       path: '/dashboard',
     },
   ],
@@ -43,7 +49,7 @@ const managerRoutes = [
     {
       id: 2,
       text: 'Service Calls',
-      icon: <InboxIcon />,
+      icon: <ListAltIcon />,
       path: '/serviceCalls',
     },
     {
@@ -57,25 +63,25 @@ const managerRoutes = [
     {
       id: 4,
       text: 'Manage Users',
-      icon: <InboxIcon />,
+      icon: <PeopleIcon />,
       path: '/manage/users',
     },
     {
       id: 5,
       text: 'Practitioners',
-      icon: <InboxIcon />,
+      icon: <EngineeringIcon />,
       path: '/manage/practitioners',
     },
     {
       id: 6,
       text: 'Manage Locations',
-      icon: <AddIcCallIcon />,
+      icon: <EditLocationAltIcon />,
       path: '/manage/locations',
     },
     {
       id: 7,
       text: 'Manage Categories',
-      icon: <AddIcCallIcon />,
+      icon: <CategoryIcon />,
       path: '/manage/categories',
     },
   ],
