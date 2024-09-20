@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Stack, TextField, Divider, InputAdornment, IconButton } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { isValidEmail, isValidPassword } from '../../../utils/validation';
 import AuthLayout from '../../../layouts/AuthLayout';
@@ -13,7 +12,7 @@ const RegisterForm = () => {
   const { displayAlert } = useAlert();
   const [errorMessage, setErrorMessage] = useState();
 
-  const [firstName, setfirstName] = useState('');
+  const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
@@ -21,6 +20,11 @@ const RegisterForm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+
+  // Track if the user has touched the fields
+  const [emailTouched, setEmailTouched] = useState(false);
+  const [passwordTouched, setPasswordTouched] = useState(false);
+  const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -58,74 +62,83 @@ const RegisterForm = () => {
   }, [displayAlert, errorMessage]);
 
   return (
-    <AuthLayout header='Register Form' bottomButton={{ text: 'Login', target: '/login' }}>
-      <Stack minWidth='100%' gap={2} sx={{ marginTop: 2 }}>
+    <AuthLayout header="Register Form" bottomButton={{ text: 'Login', target: '/login' }}>
+      <Stack minWidth="100%" gap={2} sx={{ marginTop: 2 }}>
         <form onSubmit={handleSubmit}>
           <Stack gap={2}>
             <TextField
-              label='First Name'
-              type='text'
+              label="First Name"
+              type="text"
               required
               value={firstName}
-              onChange={(e) => setfirstName(e.target.value)}></TextField>
+              onChange={(e) => setFirstName(e.target.value)}
+            />
             <TextField
-              label='Last Name'
-              type='text'
+              label="Last Name"
+              type="text"
               required
               value={lastName}
-              onChange={(e) => setLastName(e.target.value)}></TextField>
+              onChange={(e) => setLastName(e.target.value)}
+            />
             <TextField
-              label='Phone'
-              type='tel'
+              label="Phone"
+              type="tel"
               required
               value={phone}
-              onChange={(e) => setPhone(e.target.value)}></TextField>
+              onChange={(e) => setPhone(e.target.value)}
+            />
             <TextField
-              label='Email Address'
-              type='email'
+              label="Email Address"
+              type="email"
               required
-              error={!isValidEmail(email)}
+              error={emailTouched && !isValidEmail(email)} // Show error only if touched and invalid
               value={email}
-              onChange={(e) => setEmail(e.target.value)}></TextField>
+              onBlur={() => setEmailTouched(true)} // Set touched on blur
+              onChange={(e) => setEmail(e.target.value)}
+            />
             <TextField
-              label='Password'
+              label="Password"
               type={showPassword ? 'text' : 'password'}
               required
-              error={!isValidPassword(password)}
+              error={passwordTouched && !isValidPassword(password)} // Show error only if touched and invalid
               value={password}
+              onBlur={() => setPasswordTouched(true)} // Set touched on blur
               onChange={(e) => setPassword(e.target.value)}
               InputProps={{
-                // <-- This is where the toggle button is added.
                 endAdornment: (
-                  <InputAdornment position='end'>
+                  <InputAdornment position="end">
                     <IconButton
-                      aria-label='toggle password visibility'
-                      onClick={handleClickShowPassword}>
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowPassword}
+                    >
                       {showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 ),
-              }}></TextField>
+              }}
+            />
             <TextField
-              label='Confirm Password'
+              label="Confirm Password"
               type={showConfirmPassword ? 'text' : 'password'}
               required
-              error={confirmPassword !== password}
+              error={confirmPasswordTouched && confirmPassword !== password} // Show error only if touched and passwords don't match
               value={confirmPassword}
+              onBlur={() => setConfirmPasswordTouched(true)} // Set touched on blur
               onChange={(e) => setConfirmPassword(e.target.value)}
               InputProps={{
-                // <-- This is where the toggle button is added.
                 endAdornment: (
-                  <InputAdornment position='end'>
+                  <InputAdornment position="end">
                     <IconButton
-                      aria-label='toggle password visibility'
-                      onClick={handleClickShowConfirmPassword}>
+                      aria-label="toggle password visibility"
+                      onClick={handleClickShowConfirmPassword}
+                    >
                       {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
                 ),
-              }}></TextField>
-            <Button type='submit' variant='contained' size='large'>
+              }}
+            />
+            <Button type="submit" variant="contained" size="large">
               Register
             </Button>
           </Stack>
