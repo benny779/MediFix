@@ -13,7 +13,7 @@ const clientRoutes = [
     {
       id: 1,
       text: 'My Service Calls',
-      icon: <InboxIcon />,
+      icon: <ListAltIcon />,
       path: '/serviceCalls',
     },
     {
@@ -30,7 +30,7 @@ const practitionerRoutes = [
     {
       id: 1,
       text: 'Service Calls',
-      icon: <InboxIcon />,
+      icon: <ListAltIcon />,
       path: '/practitioner/serviceCalls',
     },
   ],
