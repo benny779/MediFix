@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Stack, TextField, Divider, InputAdornment, IconButton } from '@mui/material';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { isValidEmail, isValidPassword } from '../../../utils/validation';
+import { Button, Stack, TextField, Divider } from '@mui/material';
 import AuthLayout from '../../../layouts/AuthLayout';
 import { useAlert } from '../../../context/AlertContext';
 import { useAuth } from '..';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { EmailInput, PasswordInput } from '../../../components/ui';
 
 const RegisterForm = () => {
   const { register } = useAuth();
@@ -15,22 +14,13 @@ const RegisterForm = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-
-  const [emailTouched, setEmailTouched] = useState(false);
-  const [passwordTouched, setPasswordTouched] = useState(false);
-  const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/login';
-
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
-  const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -64,6 +54,7 @@ const RegisterForm = () => {
               label="First Name"
               type="text"
               required
+              fullWidth
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
             />
@@ -71,6 +62,7 @@ const RegisterForm = () => {
               label="Last Name"
               type="text"
               required
+              fullWidth
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
             />
@@ -78,63 +70,14 @@ const RegisterForm = () => {
               label="Phone"
               type="tel"
               required
+              fullWidth
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
-            <TextField
-              label="Email Address"
-              type="email"
-              required
-              error={emailTouched && !isValidEmail(email)}
-              value={email}
-              onBlur={() => setEmailTouched(true)}
-              onChange={(e) => setEmail(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-            />
-            <TextField
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              required
-              error={passwordTouched && !isValidPassword(password)}
-              value={password}
-              onBlur={() => setPasswordTouched(true)}
-              onChange={(e) => setPassword(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword}
-                    >
-                      {showPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              label="Confirm Password"
-              type={showConfirmPassword ? 'text' : 'password'}
-              required
-              error={confirmPasswordTouched && confirmPassword !== password}
-              value={confirmPassword}
-              onBlur={() => setConfirmPasswordTouched(true)}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="toggle password visibility"
-                      onClick={handleClickShowConfirmPassword}
-                    >
-                      {showConfirmPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <Button type="submit" variant="contained" size="large">
+            <EmailInput value={email} setValue={setEmail} />
+            <PasswordInput value={password} setValue={setPassword} />
+            <PasswordInput value={confirmPassword} setValue={setConfirmPassword} label="Confirm Password" />
+            <Button type="submit" variant="contained" size="large" fullWidth>
               Register
             </Button>
           </Stack>
