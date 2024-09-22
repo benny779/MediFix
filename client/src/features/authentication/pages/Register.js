@@ -21,7 +21,6 @@ const RegisterForm = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  // Track if the user has touched the fields
   const [emailTouched, setEmailTouched] = useState(false);
   const [passwordTouched, setPasswordTouched] = useState(false);
   const [confirmPasswordTouched, setConfirmPasswordTouched] = useState(false);
@@ -30,13 +29,8 @@ const RegisterForm = () => {
   const location = useLocation();
   const from = location.state?.from?.pathname || '/login';
 
-  const handleClickShowPassword = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleClickShowConfirmPassword = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -91,19 +85,21 @@ const RegisterForm = () => {
               label="Email Address"
               type="email"
               required
-              error={emailTouched && !isValidEmail(email)} // Show error only if touched and invalid
+              error={emailTouched && !isValidEmail(email)}
               value={email}
-              onBlur={() => setEmailTouched(true)} // Set touched on blur
+              onBlur={() => setEmailTouched(true)}
               onChange={(e) => setEmail(e.target.value)}
+              InputLabelProps={{ shrink: true }}
             />
             <TextField
               label="Password"
               type={showPassword ? 'text' : 'password'}
               required
-              error={passwordTouched && !isValidPassword(password)} // Show error only if touched and invalid
+              error={passwordTouched && !isValidPassword(password)}
               value={password}
-              onBlur={() => setPasswordTouched(true)} // Set touched on blur
+              onBlur={() => setPasswordTouched(true)}
               onChange={(e) => setPassword(e.target.value)}
+              InputLabelProps={{ shrink: true }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -121,9 +117,9 @@ const RegisterForm = () => {
               label="Confirm Password"
               type={showConfirmPassword ? 'text' : 'password'}
               required
-              error={confirmPasswordTouched && confirmPassword !== password} // Show error only if touched and passwords don't match
+              error={confirmPasswordTouched && confirmPassword !== password}
               value={confirmPassword}
-              onBlur={() => setConfirmPasswordTouched(true)} // Set touched on blur
+              onBlur={() => setConfirmPasswordTouched(true)}
               onChange={(e) => setConfirmPassword(e.target.value)}
               InputProps={{
                 endAdornment: (
