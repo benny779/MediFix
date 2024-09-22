@@ -1,4 +1,3 @@
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
