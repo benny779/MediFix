@@ -8,10 +8,17 @@ const capitalizeFirstLetter = (string) => {
   return string === null ? null : string.charAt(0).toUpperCase() + string.slice(1);
 };
 
+const camelCaseToWords = (string) => {
+  if (string === null) return null;
+
+  const result = string.replace(/([A-Z])/g, ' $1');
+  return result.charAt(0).toUpperCase() + result.slice(1);
+};
+
 const spreadTrim = (str, char) => {
   const first = [...str].findIndex((c) => c !== char);
   const last = [...str].reverse().findIndex((c) => c !== char);
   return str.substring(first, str.length - last);
 };
 
-export { truncateText, capitalizeFirstLetter, spreadTrim };
+export { truncateText, capitalizeFirstLetter, camelCaseToWords, spreadTrim };
