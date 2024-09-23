@@ -12,7 +12,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  CircularProgress,
   Divider,
   Chip,
   Accordion,
@@ -53,7 +52,7 @@ const getStatusChip = (status) => {
   );
 };
 
-const qrEnabled = true;
+const qrEnabled = false;
 
 const PractitionerServiceCallView = () => {
   const { id } = useParams();
@@ -107,14 +106,14 @@ const PractitionerServiceCallView = () => {
   const handleQRScan = async (result) => {
     if (!result || ++qrScanCount > 1) return;
     handleQRDialogClose();
-    handleServiceCallClose(result.data);
+    handleServiceCallClose({ qrCode: result.data });
   };
 
-  const handleServiceCallClose = async (qrCode) => {
+  const handleServiceCallClose = async ({ qrCode }) => {
     const { isSuccess, error } = await patch(`serviceCalls/${id}/close`, {
       serviceCallId: id,
       closeDetails: item.closeDetails,
-      qrCode,
+      qrCode: qrCode || (!qrEnabled && item.location.room.id),
     });
 
     if (isSuccess) {

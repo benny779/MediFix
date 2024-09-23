@@ -22,7 +22,7 @@ const getDefaultRoute = (type) => {
     case Roles.client:
       return '/serviceCalls';
     case Roles.manager:
-      return 'serviceCalls';
+      return 'dashboard';
     case Roles.practitioner:
       return 'practitioner/serviceCalls';
     default:

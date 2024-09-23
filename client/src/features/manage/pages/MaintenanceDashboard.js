@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { convertMinutes } from '../../../utils/dateHelper';
+import { camelCaseToWords } from '../../../utils/stringHelper';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
@@ -31,7 +32,7 @@ const PieChartWithCustomizedLabel = ({ data, title, size = 300 }) => {
     const y = cy + radius * Math.sin(-midAngle * RADIAN);
   
     return (
-      <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={10}>
+      <text x={x} y={y} fill="white" textAnchor="middle" dominantBaseline="central" fontSize={13}>
         {value}
       </text>
     );
@@ -81,7 +82,7 @@ const MaintenanceDashboard = ({ data }) => {
         <Grid container spacing={2}>
           {Object.entries(countBoxes).map(([key, value]) => (
             <Grid item xs={12} sm={6} md={2.4} key={key}>
-              <CountBox title={key} count={value} />
+              <CountBox title={camelCaseToWords(key)} count={value} />
             </Grid>
           ))}
         </Grid>
@@ -89,15 +90,15 @@ const MaintenanceDashboard = ({ data }) => {
 
       {/* Row 2: Practitioners Table and Pie Charts */}
       <Grid item xs={12}>
-        <Box display="flex" flexDirection="row" height={300}>
+        <Box display="flex" flexDirection="row" height={300} gap={5}>
           <Box width="50%" height="100%">
-            <TableContainer component={Paper} sx={{ height: '100%', overflow: 'auto' }}>
+            <TableContainer component={Paper} elevation={3} sx={{ height: '100%', overflow: 'auto' }}>
               <Table stickyHeader size="small">
                 <TableHead>
                   <TableRow>
                     <TableCell>Name</TableCell>
                     <TableCell align="right">Assigned</TableCell>
-                    <TableCell align="right">started</TableCell>
+                    <TableCell align="right">Started</TableCell>
                     <TableCell align="right">Finished</TableCell>
                     <TableCell align="right">Avg Time to Close</TableCell>
                   </TableRow>
@@ -116,7 +117,7 @@ const MaintenanceDashboard = ({ data }) => {
               </Table>
             </TableContainer>
           </Box>
-          <Box width="50%" display="flex" flexDirection="row" justifyContent="space-around">
+          <Box component={Paper} elevation={3} width="50%" display="flex" flexDirection="row" justifyContent="space-around">
             <PieChartWithCustomizedLabel data={priorityPieData} title="Count by Priority" />
             <PieChartWithCustomizedLabel data={categoryPieData} title="Count by Category" />
             <PieChartWithCustomizedLabel data={typePieData} title="Count by Type" />
@@ -135,7 +136,7 @@ const MaintenanceDashboard = ({ data }) => {
                   data={[
                     { name: 'Open', value: building.open },
                     { name: 'Assigned', value: building.assigned },
-                    { name: 'started', value: building.started },
+                    { name: 'Started', value: building.started },
                     { name: 'Finished', value: building.finished },
                   ]}
                   title=""

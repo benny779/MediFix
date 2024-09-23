@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   List,
   ListItem,
   ListItemText,
   ListItemButton,
   Box,
-  Chip,
+  Typography,
   ListItemAvatar,
   Avatar,
-  Stack,
+  LinearProgress,
+  Tooltip,
 } from '@mui/material';
 import useApiClient from '../../../api/apiClient';
 import { useAlert } from '../../../context/AlertContext';
@@ -24,7 +25,11 @@ const AssignToPractitioner = ({ subCategoryId, serviceCallId, onClose }) => {
         `Practitioners?subCategoryId=${subCategoryId}`
       );
 
-      isSuccess ? setPractitioners(response.items) : displayAlert(error);
+      if (isSuccess) {
+        setPractitioners(response.items);
+      } else {
+        displayAlert(error);
+      }
     };
 
     fetchPractitioners();
@@ -39,33 +44,78 @@ const AssignToPractitioner = ({ subCategoryId, serviceCallId, onClose }) => {
     onClose(isSuccess);
   };
 
+  const sortedPractitioners = useMemo(() => {
+    const processedPractitioners = practitioners
+      .map((practitioner) => {
+        const assignedWeight = 1;
+        const startedWeight = 1.5;
+        const workloadScore =
+          (practitioner.assignedServiceCalls * assignedWeight +
+            practitioner.startedServiceCalls * startedWeight) /
+          (10 * ((assignedWeight + startedWeight) / 2));
+        return {
+          ...practitioner,
+          workloadScore,
+          totalCalls: practitioner.assignedServiceCalls + practitioner.startedServiceCalls,
+        };
+      })
+      .sort((a, b) => a.workloadScore - b.workloadScore);
+
+    // Dynamic color assignment
+    const uniqueScores = [...new Set(processedPractitioners.map((p) => p.workloadScore))];
+    const colorAssignment = (index) => {
+      if (uniqueScores.length === 1) return 'success';
+      if (uniqueScores.length === 2) return index === 0 ? 'success' : 'warning';
+      return ['success', 'warning', 'error'][Math.min(index, 2)];
+    };
+
+    return processedPractitioners.map((p, index) => ({
+      ...p,
+      color: colorAssignment(uniqueScores.indexOf(p.workloadScore)),
+    }));
+  }, [practitioners]);
+
   return (
-    <List>
-      {practitioners.map((practitioner) => (
-        <ListItem key={practitioner.id}>
-          <ListItemButton onClick={() => handleAssign(practitioner.practitionerId)}>
-            <Stack flexDirection={'row'} alignItems={'center'} flex={1} mr={6}>
+    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      {sortedPractitioners.map((practitioner) => {
+        const workloadPercentage = practitioner.workloadScore * 100;
+
+        return (
+          <ListItem
+            key={practitioner.id}
+            disablePadding
+            sx={{ mb: 2, border: 1, borderColor: 'divider', borderRadius: 1 }}>
+            <ListItemButton onClick={() => handleAssign(practitioner.practitionerId)}>
               <ListItemAvatar>
-                <Avatar>{`${practitioner.firstName[0]}${practitioner.lastName[0]}`}</Avatar>
+                <Avatar sx={{ bgcolor: `${practitioner.color}.main` }}>
+                  {practitioner.firstName[0]}
+                  {practitioner.lastName[0]}
+                </Avatar>
               </ListItemAvatar>
-              <ListItemText primary={`${practitioner.firstName} ${practitioner.lastName}`} />
-            </Stack>
-            <Box>
-              <Chip
-                label={`${practitioner.assignedServiceCalls} Assigned`}
-                size='small'
-                color='primary'
-                sx={{ mr: 1 }}
+              <ListItemText
+                primary={`${practitioner.firstName} ${practitioner.lastName}`}
+                secondary={
+                  <React.Fragment>
+                    <Typography component='span' variant='body2' color='text.primary'>
+                      Assigned: {practitioner.assignedServiceCalls} | Started:{' '}
+                      {practitioner.startedServiceCalls} | Total: {practitioner.totalCalls}
+                    </Typography>
+                    <Tooltip title={`Workload: ${workloadPercentage.toFixed(0)}%`} arrow>
+                      <Box sx={{ width: '100%', mt: 1 }}>
+                        <LinearProgress
+                          variant='determinate'
+                          value={workloadPercentage}
+                          color={practitioner.color}
+                        />
+                      </Box>
+                    </Tooltip>
+                  </React.Fragment>
+                }
               />
-              <Chip
-                label={`${practitioner.startedServiceCalls} Started`}
-                size='small'
-                color='secondary'
-              />
-            </Box>
-          </ListItemButton>
-        </ListItem>
-      ))}
+            </ListItemButton>
+          </ListItem>
+        );
+      })}
     </List>
   );
 };
