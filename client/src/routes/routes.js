@@ -1,4 +1,3 @@
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
@@ -13,7 +12,7 @@ const clientRoutes = [
     {
       id: 1,
       text: 'My Service Calls',
-      icon: <InboxIcon />,
+      icon: <ListAltIcon />,
       path: '/serviceCalls',
     },
     {
@@ -30,7 +29,7 @@ const practitionerRoutes = [
     {
       id: 1,
       text: 'Service Calls',
-      icon: <InboxIcon />,
+      icon: <ListAltIcon />,
       path: '/practitioner/serviceCalls',
     },
   ],
