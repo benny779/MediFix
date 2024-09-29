@@ -252,15 +252,13 @@ const Categories = () => {
             value={editItem?.name || ''}
             onChange={(e) => setEditItem({ ...editItem, name: e.target.value })}
           />
-          {editItem?.isActive && (
-            <Box display='flex' alignItems='center' mt={2}>
-              <Typography>Active</Typography>
-              <Switch
-                checked={editItem?.isActive || false}
-                onChange={(e) => setEditItem({ ...editItem, isActive: e.target.checked })}
-              />
-            </Box>
-          )}
+          <Box display='flex' alignItems='center' mt={2}>
+            <Typography>Active</Typography>
+            <Switch
+              checked={editItem?.isActive || false}
+              onChange={(e) => setEditItem({ ...editItem, isActive: e.target.checked })}
+            />
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleDialogClose}>Cancel</Button>
