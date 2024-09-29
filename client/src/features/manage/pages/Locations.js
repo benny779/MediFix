@@ -11,7 +11,6 @@ import {
   TextField,
   Switch,
   Typography,
-  CircularProgress,
   ListItemButton,
   Stack,
 } from '@mui/material';
@@ -20,6 +19,7 @@ import useApiClient from '../../../api';
 import Spinner from '../../../components/ui/Spinner';
 
 const ENDPOINT = 'Locations';
+const withInactive = true;
 
 const Locations = () => {
   const apiClient = useApiClient();
@@ -35,10 +35,13 @@ const Locations = () => {
   const [editType, setEditType] = useState('');
 
   const repository = {
-    getBuildings: async () => await apiClient.get(`${ENDPOINT}/types/1`),
-    getFloors: async (buildingId) => await apiClient.get(`${ENDPOINT}/${buildingId}/children`),
-    getDepartments: async (floorId) => await apiClient.get(`${ENDPOINT}/${floorId}/children`),
-    getRooms: async (departmentId) => await apiClient.get(`${ENDPOINT}/${departmentId}/children`),
+    getBuildings: async () => await apiClient.get(`${ENDPOINT}/types/1`, { withInactive }),
+    getFloors: async (buildingId) =>
+      await apiClient.get(`${ENDPOINT}/${buildingId}/children`, { withInactive }),
+    getDepartments: async (floorId) =>
+      await apiClient.get(`${ENDPOINT}/${floorId}/children`, { withInactive }),
+    getRooms: async (departmentId) =>
+      await apiClient.get(`${ENDPOINT}/${departmentId}/children`, { withInactive }),
     createItem: async (type, parentId, item) =>
       apiClient.post(ENDPOINT, {
         locationType: type,

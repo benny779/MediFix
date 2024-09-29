@@ -11,7 +11,6 @@ import {
   TextField,
   Switch,
   Typography,
-  CircularProgress,
   ListItemButton,
   Stack,
 } from '@mui/material';
@@ -19,6 +18,8 @@ import useApiClient from '../../../api';
 import { capitalizeFirstLetter } from '../../../utils/stringHelper';
 import EntityExpertises from '../components/EntityExpertises';
 import Spinner from '../../../components/ui/Spinner';
+
+const withInactive = true;
 
 const Categories = () => {
   const apiClient = useApiClient();
@@ -33,10 +34,10 @@ const Categories = () => {
 
   const repository = {
     getCategory: async (id) => await apiClient.get(`Categories/${id}`),
-    getCategories: async () => await apiClient.get('Categories'),
+    getCategories: async () => await apiClient.get('Categories', { withInactive }),
     getSubCategories: async (categoryId) =>
-      await apiClient.get(`SubCategories?categoryId=${categoryId}`),
-    getExpertises: async () => await apiClient.get(`Expertises`),
+      await apiClient.get('SubCategories', { categoryId, withInactive }),
+    getExpertises: async () => await apiClient.get(`Expertises`, { withInactive }),
     createCategory: async (item) => await apiClient.post('Categories', item),
     updateCategory: async (categoryId, item) =>
       await apiClient.put(`Categories/${categoryId}`, item),
